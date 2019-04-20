@@ -56,10 +56,10 @@ void ofxMtlMapping2DVertex::drawBack()
     ofFill();
     if(activeVertex == this) {
         ofSetColor(255, 255, 255, 150);
-        ofCircle(x+15, y+15, 20);
+        ofDrawCircle(x+15, y+15, 20);
     } else if(isMouseOver()) {
         ofSetColor(255, 255, 255, 125);
-        ofCircle(x+15, y+15, 20);
+        ofDrawCircle(x+15, y+15, 20);
     } else {
         //ofSetColor(255, 255, 255, 80);
     }		
@@ -78,7 +78,7 @@ void ofxMtlMapping2DVertex::drawTop()
     }
     
     //ofCircle(x+11, y+11, 8);
-    ofRect(x+11, y+11, 8, 8);		
+    ofDrawRectangle(x+11, y+11, 8, 8);
 }
 
 //--------------------------------------------------------------

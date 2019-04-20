@@ -27,10 +27,11 @@ class ofxMtlMapping2D {
         void init(int width, int height, string mappingXmlFilePath = "mapping/xml/shapes.xml", string uiXmlFilePath = "mapping/controls/mapping.xml", int numSample = 0);
         void update();
         
-        void bind();
-        void unbind();
-        void drawFbo();
-        void draw();
+        void    bind();
+        void    unbind();
+        void    drawFbo();
+        void    draw();
+        ofFbo   getOutputFbo();
 
         void mousePressed(ofMouseEventArgs &e);
         void keyPressed(ofKeyEventArgs &e);
@@ -42,6 +43,7 @@ class ofxMtlMapping2D {
     private:
         string _mappingXmlFilePath;
         ofFbo _fbo;
+        ofFbo _outputFbo;
         ofxXmlSettings _shapesListXML;
         list<ofxMtlMapping2DShape*>::iterator iteratorForShapeWithId(int shapeId);
 

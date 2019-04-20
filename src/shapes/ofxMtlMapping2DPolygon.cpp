@@ -144,7 +144,7 @@ void ofxMtlMapping2DPolygon::drawID()
 {
     ofSetHexColor(0x000000);
     ofFill();
-    ofRect(_centroid2D.x - 10, _centroid2D.y - 10, 20, 20);
+    ofDrawRectangle(_centroid2D.x - 10, _centroid2D.y - 10, 20, 20);
     ofSetHexColor(0xFFFFFF);
     
     int xOffset;
@@ -188,7 +188,7 @@ void ofxMtlMapping2DPolygon::updatePolyline()
     list<ofxMtlMapping2DVertex*>::iterator it;
     
     if (shapeType == MAPPING_2D_SHAPE_GRID) {
-        for (int i=0; i <= 1; i++) {
+       for (int i=0; i <= 1; i++) {
             for (it=vertices.begin(); it!=vertices.end(); it++) {
                 ofxMtlMapping2DVertex* vertex = *it;
                 if (vertex->bIsOnAnEdge && vertex->edgeIndex == i) {
@@ -197,10 +197,11 @@ void ofxMtlMapping2DPolygon::updatePolyline()
                 }
             }
         }
-        
+
+       list<ofxMtlMapping2DVertex*>::reverse_iterator rit;
         for (int i=2; i <= 3; i++) {
-            for (it=vertices.end(); it!=vertices.begin(); it--) {
-                ofxMtlMapping2DVertex* vertex = *it;
+            for (rit=vertices.rbegin(); rit!=vertices.rend(); rit++) {
+                ofxMtlMapping2DVertex* vertex = *rit;
                 
                 if (vertex->bIsOnAnEdge && vertex->edgeIndex == i) {
                     // We check this for the grids, so that we don't add the vertices forming the interior of the grid

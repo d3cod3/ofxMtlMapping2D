@@ -42,9 +42,10 @@ void ofxMtlMapping2D::init(int width, int height, string mappingXmlFilePath, str
     
     // ----
     _fbo.allocate(width, height, GL_RGBA, numSample);
+    _outputFbo.allocate(width, height, GL_RGBA, numSample);
 
     // ----
-    ofxMtlMapping2DSettings::infoFont.loadFont("mapping/controls/ReplicaBold.ttf", 10);
+    ofxMtlMapping2DSettings::infoFont.load("mapping/controls/ReplicaBold.ttf", 10);
     
     // ----
     _mappingXmlFilePath = mappingXmlFilePath;
@@ -222,15 +223,22 @@ void ofxMtlMapping2D::drawFbo()
     _fbo.draw(0, 0);
 }
 
+//--------------------------------------------------------------
+ofFbo ofxMtlMapping2D::getOutputFbo(){
+    return _outputFbo;
+}
+
 #pragma mark -
 #pragma mark Render - Mapping Mode
 //--------------------------------------------------------------
-void ofxMtlMapping2D::render()
-{
-    list<ofxMtlMapping2DShape*>::iterator it;
+void ofxMtlMapping2D::render(){
+    _outputFbo.begin();
+    ofClear(.0f, .0f, .0f, .0f);
+    ofClearAlpha();
     
     // Textured shapes
-    _fbo.getTextureReference().bind();
+    list<ofxMtlMapping2DShape*>::iterator it;
+    _fbo.getTexture().bind();
     ofSetColor(255, 255, 255, 255);
     for (it=ofxMtlMapping2DShapes::pmShapes.begin(); it!=ofxMtlMapping2DShapes::pmShapes.end(); it++) {
         ofxMtlMapping2DShape* shape = *it;
@@ -239,7 +247,7 @@ void ofxMtlMapping2D::render()
             shape->render();
         }
     }
-    _fbo.getTextureReference().unbind();
+    _fbo.getTexture().unbind();
     
     // Masks - non textured shapes
     ofSetColor(0, 0, 0, 255);
@@ -250,6 +258,11 @@ void ofxMtlMapping2D::render()
             shape->render();
         }
     }
+
+    _outputFbo.end();
+
+    glColor3f(1.0f, 1.0f, 1.0f);
+    _outputFbo.draw(0,0);
 }
 
 
@@ -787,7 +800,7 @@ void ofxMtlMapping2D::chessBoard(int nbOfCol)
                 ofSetColor(ofColor::black);
             }
             
-            ofRect(colId * squareSize, rowId * squareSize, squareSize, squareSize);
+            ofDrawRectangle(colId * squareSize, rowId * squareSize, squareSize, squareSize);
         }
     }
     
@@ -795,16 +808,16 @@ void ofxMtlMapping2D::chessBoard(int nbOfCol)
     ofNoFill();
     ofSetColor(ofColor::yellow);
     glLineWidth(8.0f);
-    ofRect(.0f, .0f, boardWidth, boardHeight);
+    ofDrawRectangle(.0f, .0f, boardWidth, boardHeight);
     glLineWidth(1.0f);
     
     ofFill();
     ofSetColor(ofColor::red);
-    ofRect(60.0f, .0f, 20.0f, 20.0f);
+    ofDrawRectangle(60.0f, .0f, 20.0f, 20.0f);
     ofSetColor(ofColor::green);
-    ofRect(80.0f, .0f, 20.0f, 20.0f);
+    ofDrawRectangle(80.0f, .0f, 20.0f, 20.0f);
     ofSetColor(ofColor::blue);
-    ofRect(100.0f, .0f, 20.0f, 20.0f);
+    ofDrawRectangle(100.0f, .0f, 20.0f, 20.0f);
     
     ofSetColor(ofColor::white);
 }
