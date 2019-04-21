@@ -145,8 +145,10 @@ void ofxMtlMapping2D::update()
             list<ofxMtlMapping2DShape*>::iterator it;
             for (it=ofxMtlMapping2DShapes::pmShapes.begin(); it!=ofxMtlMapping2DShapes::pmShapes.end(); it++) {
                 ofxMtlMapping2DShape* shape = *it;
-                shape->setAsIdle();
-                shape->inputPolygon->enable();
+                if(shape->shapeType != MAPPING_2D_SHAPE_MASK){
+                    shape->setAsIdle();
+                    shape->inputPolygon->enable();
+                }
             }
         }
     
