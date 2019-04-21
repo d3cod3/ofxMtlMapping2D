@@ -98,8 +98,8 @@ ofxMtlMapping2DControls::ofxMtlMapping2DControls(int width, const string& file)
     
     
     // --- Fullscreen
-    _fullscreenExpandIcon.loadImage("GUI/expand.png");
-    _fullscreenContractIcon.loadImage("GUI/contract.png");
+    _fullscreenExpandIcon.load("GUI/expand.png");
+    _fullscreenContractIcon.load("GUI/contract.png");
     
     _toolsCanvas->addWidgetDown(new ofxUIImageToggle(kToggleSize, kToggleSize, false, "GUI/expand.png", kSettingMappingFullscreen));
     
