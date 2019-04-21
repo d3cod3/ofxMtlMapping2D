@@ -53,12 +53,37 @@ void ofxMtlMapping2D::init(int width, int height, string mappingXmlFilePath, str
     
     // ---
     addListeners();
-    
+
+    // canvas INPUT
+    canvasInput.disableMouseInput();
+    canvasInput.setbMouseInputEnabled(true);
+    canvasInput.toggleOfCam();
+    easyCamInput.enableOrtho();
+
+    canvasInputViewport.set(150,0,ofGetWindowWidth()-150,ofGetWindowHeight()/2);
+
+    // canvas OUTPUT
+    canvasOutput.disableMouseInput();
+    canvasOutput.setbMouseInputEnabled(true);
+    canvasOutput.toggleOfCam();
+    easyCamOutput.enableOrtho();
+
+    canvasOutputViewport.set(150,ofGetWindowHeight()/2,ofGetWindowWidth()-150,ofGetWindowHeight()/2);
+
+    isInputActive   = false;
+    isFocusChanged  = false;
+
+    ofxMtlMapping2DControls::mapping2DControls()->toggle();
 }
 
 //--------------------------------------------------------------
 void ofxMtlMapping2D::update()
 {    
+
+    // canvas
+    canvasInput.update();
+    canvasOutput.update();
+
     // ---- save mapping to xml
     if(ofxMtlMapping2DControls::mapping2DControls()->saveMapping()) {
         ofxMtlMapping2DControls::mapping2DControls()->resetSaveMapping();
@@ -125,11 +150,10 @@ void ofxMtlMapping2D::update()
     
     // ----
     // We changed of mode - Output / Input
-    if(ofxMtlMapping2DControls::mapping2DControls()->mappingModeChanged()) {
-        ofxMtlMapping2DControls::mapping2DControls()->resetMappingChangedFlag();        
-        
+    if(isFocusChanged) {
+        isFocusChanged = false;
         // ---- OUTPUT MODE
-        if(ofxMtlMapping2DControls::mapping2DControls()->mappingMode() == MAPPING_MODE_OUTPUT) {
+        if(!isInputActive) {
             list<ofxMtlMapping2DShape*>::iterator it;
             for (it=ofxMtlMapping2DShapes::pmShapes.begin(); it!=ofxMtlMapping2DShapes::pmShapes.end(); it++) {
                 ofxMtlMapping2DShape* shape = *it;
@@ -141,7 +165,7 @@ void ofxMtlMapping2D::update()
                 }
             }
         // ---- INPUT MODE
-        } else if (ofxMtlMapping2DControls::mapping2DControls()->mappingMode() == MAPPING_MODE_INPUT) {
+        } else if (isInputActive) {
             list<ofxMtlMapping2DShape*>::iterator it;
             for (it=ofxMtlMapping2DShapes::pmShapes.begin(); it!=ofxMtlMapping2DShapes::pmShapes.end(); it++) {
                 ofxMtlMapping2DShape* shape = *it;
@@ -151,7 +175,7 @@ void ofxMtlMapping2D::update()
                 }
             }
         }
-    
+
     }
     
     // ----
@@ -160,6 +184,22 @@ void ofxMtlMapping2D::update()
     for (it=ofxMtlMapping2DShapes::pmShapes.begin(); it!=ofxMtlMapping2DShapes::pmShapes.end(); it++) {
         ofxMtlMapping2DShape* shape = *it;
         shape->update();
+        if(isInputActive){
+            shape->setCustomMouse(canvasInput.getMovingPoint().x,canvasInput.getMovingPoint().y);
+            shape->inputPolygon->setCustomMouse(canvasInput.getMovingPoint().x,canvasInput.getMovingPoint().y);
+            list<ofxMtlMapping2DVertex*>::iterator vit;
+            for (vit=shape->inputPolygon->vertices.begin(); vit!=shape->inputPolygon->vertices.end(); vit++) {
+                ofxMtlMapping2DVertex* vertex = *vit;
+                vertex->setCustomMouse(canvasInput.getMovingPoint().x,canvasInput.getMovingPoint().y);
+            }
+        }else if(!isInputActive){
+            shape->setCustomMouse(canvasOutput.getMovingPoint().x,canvasOutput.getMovingPoint().y);
+            list<ofxMtlMapping2DVertex*>::iterator vit;
+            for (vit=shape->vertices.begin(); vit!=shape->vertices.end(); vit++) {
+                ofxMtlMapping2DVertex* vertex = *vit;
+                vertex->setCustomMouse(canvasOutput.getMovingPoint().x,canvasOutput.getMovingPoint().y);
+            }
+        }
     }
 }
 
@@ -168,38 +208,59 @@ void ofxMtlMapping2D::update()
 //--------------------------------------------------------------
 void ofxMtlMapping2D::draw()
 {
-    
-    if(ofxMtlMapping2DControls::mapping2DControls()->editShapes()) {
-        // ---- OUTPUT MODE
-        if(ofxMtlMapping2DControls::mapping2DControls()->mappingMode() == MAPPING_MODE_OUTPUT) {
-            render();
 
-          
-        // ---- INPUT MODE
-        } else if (ofxMtlMapping2DControls::mapping2DControls()->mappingMode() == MAPPING_MODE_INPUT) {
-            // ----
-            drawFbo(); 
-        }
-        
-        
-        // ----
+    // INPUT
+    canvasInput.begin(canvasInputViewport);
+
+    drawFbo();
+    if(ofxMtlMapping2DControls::mapping2DControls()->editShapes() && isInputActive) {
+
         list<ofxMtlMapping2DShape*>::iterator it;
         for (it=ofxMtlMapping2DShapes::pmShapes.begin(); it!=ofxMtlMapping2DShapes::pmShapes.end(); it++) {
             ofxMtlMapping2DShape* shape = *it;
-            
+
             if(shape != ofxMtlMapping2DShape::activeShape) {
                 shape->draw();
             }
         }
-        
+
         if(ofxMtlMapping2DShape::activeShape) {
             //Draw active shape on top
             ofxMtlMapping2DShape::activeShape->draw();
         }
     }
-    else {
-        render();
+
+    canvasInput.end();
+
+    ofSetColor(100);
+    ofSetLineWidth(4);
+    ofDrawLine(canvasOutputViewport.x,canvasOutputViewport.y,canvasOutputViewport.x+canvasOutputViewport.width,canvasOutputViewport.y);
+    ofSetLineWidth(1);
+
+    // OUTPUT
+    canvasOutput.begin(canvasOutputViewport);
+
+    render();
+
+    if(ofxMtlMapping2DControls::mapping2DControls()->editShapes() && !isInputActive) {
+
+        list<ofxMtlMapping2DShape*>::iterator it;
+        for (it=ofxMtlMapping2DShapes::pmShapes.begin(); it!=ofxMtlMapping2DShapes::pmShapes.end(); it++) {
+            ofxMtlMapping2DShape* shape = *it;
+
+            if(shape != ofxMtlMapping2DShape::activeShape) {
+                shape->draw();
+            }
+        }
+
+        if(ofxMtlMapping2DShape::activeShape) {
+            //Draw active shape on top
+            ofxMtlMapping2DShape::activeShape->draw();
+        }
     }
+
+    canvasOutput.end();
+    
 }
 
 #pragma mark -
@@ -222,6 +283,11 @@ void ofxMtlMapping2D::unbind()
 void ofxMtlMapping2D::drawFbo()
 {
     glColor3f(1.0f, 1.0f, 1.0f);
+    ofNoFill();
+    ofSetLineWidth(2);
+    ofDrawRectangle(0,0,_fbo.getWidth(),_fbo.getHeight());
+    ofSetLineWidth(1);
+    ofFill();
     _fbo.draw(0, 0);
 }
 
@@ -234,6 +300,14 @@ ofFbo ofxMtlMapping2D::getOutputFbo(){
 #pragma mark Render - Mapping Mode
 //--------------------------------------------------------------
 void ofxMtlMapping2D::render(){
+
+    ofSetColor(255);
+    ofNoFill();
+    ofSetLineWidth(2);
+    ofDrawRectangle(0,0,_outputFbo.getWidth(),_outputFbo.getHeight());
+    ofSetLineWidth(1);
+    ofFill();
+
     _outputFbo.begin();
     ofClear(.0f, .0f, .0f, .0f);
     ofClearAlpha();
@@ -356,14 +430,20 @@ void ofxMtlMapping2D::deleteShape()
 
 //--------------------------------------------------------------
 void ofxMtlMapping2D::addListeners() {
+    ofAddListener(ofEvents().mouseDragged, this, &ofxMtlMapping2D::mouseDragged);
 	ofAddListener(ofEvents().mousePressed, this, &ofxMtlMapping2D::mousePressed);
+    ofAddListener(ofEvents().mouseReleased, this, &ofxMtlMapping2D::mouseReleased);
+    ofAddListener(ofEvents().mouseScrolled, this, &ofxMtlMapping2D::mouseScrolled);
     ofAddListener(ofEvents().keyPressed, this, &ofxMtlMapping2D::keyPressed);
     ofAddListener(ofEvents().windowResized, this, &ofxMtlMapping2D::windowResized);
 }
 
 //--------------------------------------------------------------
 void ofxMtlMapping2D::removeListeners() {
-	ofRemoveListener(ofEvents().mousePressed, this, &ofxMtlMapping2D::mousePressed);   
+    ofRemoveListener(ofEvents().mouseDragged, this, &ofxMtlMapping2D::mouseDragged);
+    ofRemoveListener(ofEvents().mousePressed, this, &ofxMtlMapping2D::mousePressed);
+    ofRemoveListener(ofEvents().mouseReleased, this, &ofxMtlMapping2D::mouseReleased);
+    ofRemoveListener(ofEvents().mouseScrolled, this, &ofxMtlMapping2D::mouseScrolled);
     ofRemoveListener(ofEvents().keyPressed, this, &ofxMtlMapping2D::keyPressed);
     ofRemoveListener(ofEvents().windowResized, this, &ofxMtlMapping2D::windowResized);
 
@@ -380,6 +460,11 @@ void ofxMtlMapping2D::windowResized(ofResizeEventArgs &e)
     ofxMtlMapping2DControls::mapping2DControls()->windowResized();
 }
 
+//--------------------------------------------------------------
+void ofxMtlMapping2D::mouseDragged(ofMouseEventArgs &e){
+    canvasInput.mouseDragged(e);
+    canvasOutput.mouseDragged(e);
+}
 
 //--------------------------------------------------------------
 void ofxMtlMapping2D::mousePressed(ofMouseEventArgs &e)
@@ -387,6 +472,22 @@ void ofxMtlMapping2D::mousePressed(ofMouseEventArgs &e)
     int eX = e.x;
     int eY = e.y;
     int eButton = e.button;
+
+    if(canvasInputViewport.inside(ofVec3f(e.x,e.y,0))){
+        isInputActive       = true;
+        isFocusChanged      = true;
+        actualMouse = ofVec2f(canvasInput.getMovingPoint().x,canvasInput.getMovingPoint().y);
+        ofxMtlMapping2DControls::mapping2DControls()->setMappingMode(MAPPING_MODE_INPUT);
+    }
+
+    if(canvasOutputViewport.inside(ofVec3f(e.x,e.y,0))){
+        isInputActive       = false;
+        isFocusChanged      = true;
+        actualMouse = ofVec2f(canvasOutput.getMovingPoint().x,canvasOutput.getMovingPoint().y);
+        ofxMtlMapping2DControls::mapping2DControls()->setMappingMode(MAPPING_MODE_OUTPUT);
+    }
+
+
     
     if (ofxMtlMapping2DControls::mapping2DControls()->isHit(eX, eY))
         return;
@@ -407,17 +508,17 @@ void ofxMtlMapping2D::mousePressed(ofMouseEventArgs &e)
     for (it=ofxMtlMapping2DShapes::pmShapes.begin(); it!=ofxMtlMapping2DShapes::pmShapes.end(); it++) {
         ofxMtlMapping2DShape* shape = *it;
         bool grabbedOne = false;
-        if(ofxMtlMapping2DControls::mapping2DControls()->mappingMode() == MAPPING_MODE_OUTPUT) {
-            if(shape->hitTest(eX, eY)) {
+        if(!isInputActive) {
+            if(shape->hitTest(actualMouse.x,actualMouse.y)) {
                 grabbedOne = true;
-                shape->select(eX, eY);
+                shape->select(actualMouse.x,actualMouse.y);
                 shape->enable();
             }
-        } else if (ofxMtlMapping2DControls::mapping2DControls()->mappingMode() == MAPPING_MODE_INPUT) {
+        } else if (isInputActive) {
             if (shape->inputPolygon || shape->shapeType != MAPPING_2D_SHAPE_MASK) {
-                if(shape->inputPolygon->hitTest(eX, eY)) {
+                if(shape->inputPolygon->hitTest(actualMouse.x,actualMouse.y)) {
                     grabbedOne = true;
-                    shape->inputPolygon->select(eX, eY);
+                    shape->inputPolygon->select(actualMouse.x,actualMouse.y);
                     shape->inputPolygon->enable();
                 }
             }
@@ -433,7 +534,7 @@ void ofxMtlMapping2D::mousePressed(ofMouseEventArgs &e)
     }
     
     // ----
-    if(ofxMtlMapping2DSettings::kIsManuallyAddingDeletingVertexEnabled && ofxMtlMapping2DControls::mapping2DControls()->mappingMode() == MAPPING_MODE_OUTPUT) {
+    if(ofxMtlMapping2DSettings::kIsManuallyAddingDeletingVertexEnabled && ofxMtlMapping2DControls::mapping2DControls()->mappingMode() == !isInputActive) {
         // Add vertex to the selected shape
         if(ofxMtlMapping2DShape::activeShape) {
             // Only if the shape is a Mask
@@ -441,14 +542,29 @@ void ofxMtlMapping2D::mousePressed(ofMouseEventArgs &e)
                 ofxMtlMapping2DShape* shape = ofxMtlMapping2DShape::activeShape;
                 if (shape) {
                     ofLog(OF_LOG_NOTICE, "Add vertex to shape %i", shape->shapeId);
-                    shape->addPoint(eX, eY);
+                    shape->addPoint(actualMouse.x,actualMouse.y);
                 } else {
                     ofLog(OF_LOG_NOTICE, "No shape has been selected, can not add a vertex");
                 }
             }
         }
     }
+
+    canvasInput.mousePressed(e);
+    canvasOutput.mousePressed(e);
     
+}
+
+//--------------------------------------------------------------
+void ofxMtlMapping2D::mouseReleased(ofMouseEventArgs &e){
+    canvasInput.mouseReleased(e);
+    canvasOutput.mouseReleased(e);
+}
+
+//--------------------------------------------------------------
+void ofxMtlMapping2D::mouseScrolled(ofMouseEventArgs &e){
+    canvasInput.mouseScrolled(e);
+    canvasOutput.mouseScrolled(e);
 }
 
 #pragma mark -
@@ -467,7 +583,7 @@ void ofxMtlMapping2D::keyPressed(ofKeyEventArgs &e)
             break;
             
         case 'm':
-            ofxMtlMapping2DControls::mapping2DControls()->toggle();
+            //ofxMtlMapping2DControls::mapping2DControls()->toggle();
             break;
             
         case 's':

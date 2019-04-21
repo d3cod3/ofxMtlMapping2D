@@ -7,7 +7,7 @@ void ofApp::setup(){
     
     // ----
     _mapping = new ofxMtlMapping2D();
-    _mapping->init(ofGetWidth(), ofGetHeight(), "mapping/xml/shapes.xml", "mapping/controls/mapping.xml");
+    _mapping->init(1280, 720, "mapping/xml/shapes.xml", "mapping/controls/mapping.xml");
 }
 
 //--------------------------------------------------------------
@@ -19,6 +19,8 @@ void ofApp::update(){
 
 //--------------------------------------------------------------
 void ofApp::draw(){
+    ofBackground(0);
+
     // ----
     _mapping->bind();
     

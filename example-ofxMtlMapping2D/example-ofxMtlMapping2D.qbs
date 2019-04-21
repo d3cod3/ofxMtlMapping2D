@@ -23,7 +23,7 @@ Project{
         // the list of used addons in array format. eg:
         //
         of.addons: [
-            'ofxMtlMapping2D','ofxXmlSettings'
+            'ofxInfiniteCanvas','ofxMtlMapping2D','ofxXmlSettings'
         ]
 
         // additional flags for the project. the of module sets some

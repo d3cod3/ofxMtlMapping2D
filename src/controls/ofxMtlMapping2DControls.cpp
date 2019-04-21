@@ -98,10 +98,10 @@ ofxMtlMapping2DControls::ofxMtlMapping2DControls(int width, const string& file)
     
     
     // --- Fullscreen
-    _fullscreenExpandIcon.load("GUI/expand.png");
-    _fullscreenContractIcon.load("GUI/contract.png");
+    //_fullscreenExpandIcon.load("GUI/expand.png");
+    //_fullscreenContractIcon.load("GUI/contract.png");
     
-    _toolsCanvas->addWidgetDown(new ofxUIImageToggle(kToggleSize, kToggleSize, false, "GUI/expand.png", kSettingMappingFullscreen));
+    //_toolsCanvas->addWidgetDown(new ofxUIImageToggle(kToggleSize, kToggleSize, false, "GUI/expand.png", kSettingMappingFullscreen));
     
     // Edit
     _toolsCanvas->addWidgetDown(new ofxUIImageToggle(kToggleSize, kToggleSize, false, "GUI/edit.png", kSettingMappingEditShapes));
@@ -113,9 +113,9 @@ ofxMtlMapping2DControls::ofxMtlMapping2DControls(int width, const string& file)
     ofxUISpacer *spacer = new ofxUISpacer(kWidgetWidth, kSpacerHeight);
     spacer->setDrawFill(false);
     
-    _toolsCanvas->addWidgetDown(spacer);
-    _toolsCanvas->addWidgetDown(new ofxUIImageToggle(kToggleSize, kToggleSize, false, "GUI/projo.png", kSettingMappingModeOutput));
-    _toolsCanvas->addWidgetDown(new ofxUIImageToggle(kToggleSize, kToggleSize, false, "GUI/texture.png", kSettingMappingModeInput));
+    //_toolsCanvas->addWidgetDown(spacer);
+    //_toolsCanvas->addWidgetDown(new ofxUIImageToggle(kToggleSize, kToggleSize, false, "GUI/projo.png", kSettingMappingModeOutput));
+    //_toolsCanvas->addWidgetDown(new ofxUIImageToggle(kToggleSize, kToggleSize, false, "GUI/texture.png", kSettingMappingModeInput));
     
 
     // add mapping shape controls
@@ -138,15 +138,15 @@ ofxMtlMapping2DControls::ofxMtlMapping2DControls(int width, const string& file)
     
     load();
     
-    if (getToggleValue(kSettingMappingModeOutput)) {
+    /*if (getToggleValue(kSettingMappingModeOutput)) {
         _mappingMode = MAPPING_MODE_OUTPUT;
     } else if (getToggleValue(kSettingMappingModeInput)) {
         _mappingMode = MAPPING_MODE_INPUT;
-    }
+    }*/
     
     // ---
-    ((ofxUIToggle *)_toolsCanvas->getWidget(kSettingMappingEditShapes))->setValue(false);
-    setUIShapeEditingState(false);
+    ((ofxUIToggle *)_toolsCanvas->getWidget(kSettingMappingEditShapes))->setValue(true);
+    setUIShapeEditingState(true);
 }
 
 
@@ -158,13 +158,13 @@ void ofxMtlMapping2DControls::toolsUiEvent(ofxUIEventArgs &event)
 {
     string name = event.widget->getName();
     
-    if (name == kSettingMappingFullscreen) {        
+    /*if (name == kSettingMappingFullscreen) {
         ofSetFullscreen(getToggleValue(name));
-    }
+    }*/
     
     
     // ----
-    else if (name == kSettingMappingSave) {
+    if (name == kSettingMappingSave) {
         _saveMapping = getToggleValue(name);
     }
     else if (name == kSettingMappingLoad) {
@@ -172,10 +172,10 @@ void ofxMtlMapping2DControls::toolsUiEvent(ofxUIEventArgs &event)
     }
     
     // ---- Editing
-    else if (name == kSettingMappingEditShapes) {
+    /*else if (name == kSettingMappingEditShapes) {
         setUIShapeEditingState(getToggleValue(name));
         
-    }
+    }*/
 //    else if (name == kSettingMappingShowShapesId) {
 //        _showShapesId = getToggleValue(name);
 //    }
@@ -214,7 +214,7 @@ void ofxMtlMapping2DControls::toolsUiEvent(ofxUIEventArgs &event)
         
         _mappingModeChanged = true;
 
-        if (name == kSettingMappingModeOutput) {
+        /*if (name == kSettingMappingModeOutput) {
             _mappingMode = MAPPING_MODE_OUTPUT;
             
             ((ofxUIImageToggle *)_toolsCanvas->getWidget(kSettingMappingModeInput))->setValue(false);
@@ -245,7 +245,7 @@ void ofxMtlMapping2DControls::toolsUiEvent(ofxUIEventArgs &event)
             
             // ---
             hideGridSettingsCanvas();
-        }
+        }*/
         
         refreshShapesListForMappingMode(_mappingMode);
 
@@ -284,8 +284,8 @@ void ofxMtlMapping2DControls::setUIShapeEditingState(bool isOn)
     ((ofxUIImageToggle *)_toolsCanvas->getWidget(kSettingMappingSave))->setVisible(_editShapes);
     ((ofxUIImageToggle *)_toolsCanvas->getWidget(kSettingMappingLoad))->setVisible(_editShapes);
 
-    ((ofxUIImageToggle *)_toolsCanvas->getWidget(kSettingMappingModeInput))->setVisible(_editShapes);
-    ((ofxUIImageToggle *)_toolsCanvas->getWidget(kSettingMappingModeOutput))->setVisible(_editShapes);
+    //((ofxUIImageToggle *)_toolsCanvas->getWidget(kSettingMappingModeInput))->setVisible(_editShapes);
+    //((ofxUIImageToggle *)_toolsCanvas->getWidget(kSettingMappingModeOutput))->setVisible(_editShapes);
     
     ((ofxUIImageToggle *)_toolsCanvas->getWidget(kSettingMappingCreateNewQuad))->setVisible(_editShapes);
     ((ofxUIImageToggle *)_toolsCanvas->getWidget(kSettingMappingCreateNewGrid))->setVisible(_editShapes);
@@ -399,11 +399,11 @@ void ofxMtlMapping2DControls::unselectShapesToggles()
 //--------------------------------------------------------------
 void ofxMtlMapping2DControls::windowResized()
 {
-    if (ofGetWindowMode() == OF_FULLSCREEN) {
+    /*if (ofGetWindowMode() == OF_FULLSCREEN) {
         ((ofxUIImageToggle *)_toolsCanvas->getWidget(kSettingMappingFullscreen))->setImage(&_fullscreenContractIcon);
     } else {
         ((ofxUIImageToggle *)_toolsCanvas->getWidget(kSettingMappingFullscreen))->setImage(&_fullscreenExpandIcon);
-    }
+    }*/
     
     _toolsCanvas->setHeight(ofGetHeight());
     _gridSettingsCanvas->setPosition(_toolsCanvas->getRect()->width, ofGetHeight() - 90);
@@ -501,13 +501,13 @@ void ofxMtlMapping2DControls::resetSelectedShapeChangedFlag()
 //--------------------------------------------------------------
 void ofxMtlMapping2DControls::showInputModeToggle()
 {
-    ((ofxUIToggle *)_toolsCanvas->getWidget(kSettingMappingModeInput))->setVisible(true);
+    //((ofxUIToggle *)_toolsCanvas->getWidget(kSettingMappingModeInput))->setVisible(true);
 }
 
 //--------------------------------------------------------------
 void ofxMtlMapping2DControls::hideInputModeToggle()
 {
-    ((ofxUIToggle *)_toolsCanvas->getWidget(kSettingMappingModeInput))->setVisible(false);
+    //((ofxUIToggle *)_toolsCanvas->getWidget(kSettingMappingModeInput))->setVisible(false);
 }
 
 #pragma mark -

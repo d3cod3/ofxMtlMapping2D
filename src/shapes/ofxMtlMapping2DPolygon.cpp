@@ -21,6 +21,8 @@ ofxMtlMapping2DPolygon::ofxMtlMapping2DPolygon()
 {    
     disableAllEvents();
 	enableMouseEvents();
+
+    setUseCustomMouse(true);
     
     // ----
     polyline = new ofPolyline();

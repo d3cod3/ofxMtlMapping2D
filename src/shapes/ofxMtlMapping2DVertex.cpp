@@ -8,6 +8,8 @@ ofxMtlMapping2DVertex::ofxMtlMapping2DVertex()
 {
 	disableAllEvents();
 	enableMouseEvents();
+    setUseCustomMouse(true);
+
 	enabled = false;
     bIsOnAnEdge = true;
     edgeIndex = -1;

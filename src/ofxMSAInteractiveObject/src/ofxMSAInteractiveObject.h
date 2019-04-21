@@ -39,6 +39,11 @@ public:
 	void setSize(float _w, float _h);	// set size of object
 //	void setPosAndSize(float _x, float _y, float _w, float _h);		// replaced with ofRectangle::set
 
+
+    bool isUsingCustomMouse;
+    void setUseCustomMouse(bool _u) { isUsingCustomMouse = _u; }
+    float customMouseX, customMouseY;
+    void setCustomMouse(float _x, float _y) { customMouseX = _x; customMouseY = _y; }
     
 	bool isMouseOver() const;                     // returns true if mouse is over object (based on position and size)
 	bool isMousePressed(int mouseButton=0) const;    // returns true if mouse button is down and was pressed over object (based on position and size)

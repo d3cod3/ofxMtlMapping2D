@@ -4,6 +4,7 @@
 #include "ofMain.h"
 
 // Addons
+#include "ofxInfiniteCanvas.h"
 #include "ofxXmlSettings.h"
 
 //Mapping
@@ -33,7 +34,11 @@ class ofxMtlMapping2D {
         void    draw();
         ofFbo   getOutputFbo();
 
+        void mouseDragged(ofMouseEventArgs &e);
         void mousePressed(ofMouseEventArgs &e);
+        void mouseReleased(ofMouseEventArgs &e);
+        void mouseScrolled(ofMouseEventArgs &e);
+
         void keyPressed(ofKeyEventArgs &e);
         void windowResized(ofResizeEventArgs &e);
 
@@ -41,6 +46,19 @@ class ofxMtlMapping2D {
         void chessBoard(int nbOfCol = 10);
 
     private:
+        ofxInfiniteCanvas       canvasInput;
+        ofEasyCam               easyCamInput;
+        ofRectangle             canvasInputViewport;
+
+        ofxInfiniteCanvas       canvasOutput;
+        ofEasyCam               easyCamOutput;
+        ofRectangle             canvasOutputViewport;
+
+        ofVec2f                 actualMouse;
+
+        bool                    isInputActive;
+        bool                    isFocusChanged;
+
         string _mappingXmlFilePath;
         ofFbo _fbo;
         ofFbo _outputFbo;

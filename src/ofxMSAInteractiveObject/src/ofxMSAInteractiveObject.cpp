@@ -121,12 +121,22 @@ bool ofxMSAInteractiveObject::isMousePressed(int mouseButton) const {
 
 //--------------------------------------------------------------
 int ofxMSAInteractiveObject::getMouseX() const {
-    return ofGetMouseX();
+    if(isUsingCustomMouse){
+        return customMouseX;
+    }else{
+        return ofGetMouseX();
+    }
+
 }
 
 //--------------------------------------------------------------
 int ofxMSAInteractiveObject::getMouseY() const {
-    return ofGetMouseY();
+    if(isUsingCustomMouse){
+        return customMouseY;
+    }else{
+        return ofGetMouseY();
+    }
+
 }
 
 //--------------------------------------------------------------
@@ -182,6 +192,12 @@ void ofxMSAInteractiveObject::_exit(ofEventArgs &e) {
 void ofxMSAInteractiveObject::_mouseMoved(ofMouseEventArgs &e) {
 	int x = e.x;
 	int y = e.y;
+
+    if(isUsingCustomMouse){
+        x = customMouseX;
+        y = customMouseY;
+    }
+
 	int button = e.button;
 	if(verbose) printf("ofxMSAInteractiveObject::_mouseMoved(x: %i, y: %i)\n", x, y);
 	if(!enabled) return;
@@ -210,6 +226,12 @@ void ofxMSAInteractiveObject::_mouseMoved(ofMouseEventArgs &e) {
 void ofxMSAInteractiveObject::_mousePressed(ofMouseEventArgs &e) {
 	int x = e.x;
 	int y = e.y;
+
+    if(isUsingCustomMouse){
+        x = customMouseX;
+        y = customMouseY;
+    }
+
 	int button = e.button;
 	
 	if(verbose) printf("ofxMSAInteractiveObject::_mousePressed(x: %i, y: %i, button: %i)\n", x, y, button);
@@ -237,6 +259,12 @@ void ofxMSAInteractiveObject::_mousePressed(ofMouseEventArgs &e) {
 void ofxMSAInteractiveObject::_mouseDragged(ofMouseEventArgs &e) {
 	int x = e.x;
 	int y = e.y;
+
+    if(isUsingCustomMouse){
+        x = customMouseX;
+        y = customMouseY;
+    }
+
 	int button = e.button;
 	
 	if(verbose) printf("ofxMSAInteractiveObject::_mouseDragged(x: %i, y: %i, button: %i)\n", x, y, button);
@@ -272,6 +300,12 @@ void ofxMSAInteractiveObject::_mouseDragged(ofMouseEventArgs &e) {
 void ofxMSAInteractiveObject::_mouseReleased(ofMouseEventArgs &e) {
 	int x = e.x;
 	int y = e.y;
+
+    if(isUsingCustomMouse){
+        x = customMouseX;
+        y = customMouseY;
+    }
+
 	int button = e.button;
 	
 	if(verbose) printf("ofxMSAInteractiveObject::_mouseReleased(x: %i, y: %i, button: %i)\n", x, y, button);

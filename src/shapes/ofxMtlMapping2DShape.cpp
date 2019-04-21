@@ -60,7 +60,7 @@ void ofxMtlMapping2DShape::update()
         calcHomography();
     }
     
-    if (activeShape == this) {
+    if (activeShape == this && shapeType != MAPPING_2D_SHAPE_MASK) {
         if (ofxMtlMapping2DControls::mapping2DControls()->mappingMode() == MAPPING_MODE_INPUT) {
             if (shapeType == MAPPING_2D_SHAPE_QUAD || shapeType == MAPPING_2D_SHAPE_GRID) {
                 inputPolygon->update(true);

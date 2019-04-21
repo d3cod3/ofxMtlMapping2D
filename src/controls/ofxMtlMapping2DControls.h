@@ -55,6 +55,7 @@ class ofxMtlMapping2DControls
     
         const bool& mappingModeChanged() { return _mappingModeChanged; }
         ofxMtlMapping2DMode mappingMode() { return _mappingMode; }
+        void setMappingMode(ofxMtlMapping2DMode _m) { _mappingMode=_m; }
         void resetMappingChangedFlag();
     
         void showGridSettingsCanvas();
@@ -125,7 +126,7 @@ class ofxMtlMapping2DControls
     
         ofxUICanvas *_gridSettingsCanvas;
     
-        ofImage _fullscreenExpandIcon;
-        ofImage _fullscreenContractIcon;
+        //ofImage _fullscreenExpandIcon;
+        //ofImage _fullscreenContractIcon;
 
 };
