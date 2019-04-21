@@ -1,3 +1,2 @@
+ofxInfiniteCanvas
 ofxXmlSettings
-ofxUI
-ofxMSAInteractiveObject
