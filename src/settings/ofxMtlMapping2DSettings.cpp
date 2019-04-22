@@ -5,7 +5,7 @@ const bool  ofxMtlMapping2DSettings::kIsManuallyCreatingShapeEnabled            
 const bool  ofxMtlMapping2DSettings::kIsManuallyAddingDeletingVertexEnabled       = true;
 
 // ---
-ofTrueTypeFont ofxMtlMapping2DSettings::infoFont;
+ofxFontStash ofxMtlMapping2DSettings::infoFont;
 
 // ---
 float ofxMtlMapping2DSettings::gridDefaultNbCols = 2.0f;

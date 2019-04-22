@@ -1,29 +1,17 @@
 ofxMtlMapping2D
 =====================================
 
+MODDED FORK
+
+Switched view to both separate INOUT & OUTPUT mode at the same time (MapMap or MadMapper style).
+Using ofxInfiniteCanvas addon for draggable&zooming areas
+Using ofxFontStash for correctly render fonts with zoom
+
+![MapMap mode](https://raw.githubusercontent.com/d3cod3/ofxMtlMapping2D/master/capture.png)
+
 Introduction
 ------------
 C++ openFrameworks addon to achieve 2D projection-mapping of textures to physical objects. Each instance of ofxMtlMapping2D has its own FBO to draw content into. Each created shape has an output polygon used for mapping, and an input polygon defining the texture coordinates to be used.
-
-**Output mode**  
-![output mode](http://www.morethanlogic.com/ofxMtl/ofxMtlMapping2D/ofxMtlMapping2D_output.png)
-
-**Input mode**  
-![input mode](http://www.morethanlogic.com/ofxMtl/ofxMtlMapping2D/ofxMtlMapping2D_input.png)
-
-Some projects using this addon...
-------------
-... or variations of it.
-<table style="border-style: hidden; background:#FFFFFF">
-<tr>
-<td style="border-style: hidden; background:#FFFFFF"><a href="http://www.smallfly.com/2012/08/echos/"><img src="http://www.morethanlogic.com/ofxMtl/ofxMtlMapping2D/ofxMtlMapping2D_Echos__.jpg" alt="Echos"></a></td>
-<td style="border-style: hidden; background:#FFFFFF"><a href="http://www.smallfly.com/2011/12/barcode/"><img src="http://www.morethanlogic.com/ofxMtl/ofxMtlMapping2D/ofxMtlMapping2D_Barcode.jpg" alt="Barcode"></a></td>
-</tr>
-<tr>
-<td style="border-style: hidden; background:#FFFFFF"><a href="http://www.smallfly.com/2011/06/306/"><img src="http://www.morethanlogic.com/ofxMtl/ofxMtlMapping2D/ofxMtlMapping2D_DesignOpenHouse.jpg" alt="Open house"></a></td>
-<td style="border-style: hidden; background:#FFFFFF"><a href="http://www.smallfly.com/2011/06/sam-roberts-band-i-feel-you/"><img src="http://www.morethanlogic.com/ofxMtl/ofxMtlMapping2D/ofxMtlMapping2D_SamRobertBand_.jpg" alt="Sam Robert's Band"></a></td>
-</tr>
-</table>
 
 Licence
 -------
@@ -37,8 +25,8 @@ Copy to your openFrameworks/addons folder.
 
 Dependencies
 ------------
-* [ofxMSAInteractiveObject](https://github.com/memo/ofxMSAInteractiveObject)
-* [ofxUI](https://github.com/rezaali/ofxUI)
+* [ofxFontStash](https://github.com/d3cod3/ofxFontStash)
+* [ofxInfiniteCanvas](https://github.com/d3cod3/ofxInfiniteCanvas)
 * ofxXmlSettings
 * homography.h by Arturo Castro (included in this repo)
 

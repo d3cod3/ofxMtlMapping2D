@@ -9,20 +9,10 @@
 #define kControlsMappingToolsPanelWidth 39
 #define kControlsMappingShapesListPanelWidth 150
 
-#define kSettingMappingSave                 "MAPPING:SAVE"
-#define kSettingMappingLoad                 "MAPPING:LOAD"
-
-#define kSettingMappingFullscreen           "MAPPING:FULLSCREEN"
-#define kSettingMappingEditShapes           "MAPPING:EDIT_SHAPES"
 #define kSettingMappingCreateNewQuad        "MAPPING:CREATE_NEW_QUAD"
 #define kSettingMappingCreateNewGrid        "MAPPING:CREATE_NEW_GRID"
 #define kSettingMappingCreateNewTriangle    "MAPPING:CREATE_NEW_TRIANGLE"
 #define kSettingMappingCreateNewMask        "MAPPING:CREATE_NEW_MASK"
-
-#define kSettingMappingShowShapesId         "MAPPING:SHOW_SHAPES_ID"
-
-#define kSettingMappingModeOutput           "MAPPING_MODE:OUTPUT"
-#define kSettingMappingModeInput            "MAPPING_MODE:INPUT"
 
 
 //--------------------------------------------------------------
@@ -31,7 +21,6 @@ class ofxMtlMapping2DControls
 {
     
     public:
-        static ofxMtlMapping2DControls * mapping2DControls(string xmlFilePath);
         static ofxMtlMapping2DControls * mapping2DControls();
 
     
@@ -63,12 +52,6 @@ class ofxMtlMapping2DControls
 
         int shapeCounter;
     
-        void save();
-        void load();
-    
-        void showInputModeToggle();
-        void hideInputModeToggle();
-    
         void enable();
         void disable();
         void toggle();
@@ -87,7 +70,6 @@ class ofxMtlMapping2DControls
 
     protected:
         ofxUIScrollableCanvas *_toolsCanvas;
-        string _file;
         
         static const int kSliderHeight = 16;
         static const int kSpacerHeight = 20;
@@ -99,7 +81,7 @@ class ofxMtlMapping2DControls
         ofPoint get2DPadValue(const string& name);
         
     private:
-        ofxMtlMapping2DControls(int width, const string& file);
+        ofxMtlMapping2DControls(int width);
 
         static ofxMtlMapping2DControls *_mapping2DControls;
         map<ofxMtlMapping2DShapeType, string> shapeTypesAsString;

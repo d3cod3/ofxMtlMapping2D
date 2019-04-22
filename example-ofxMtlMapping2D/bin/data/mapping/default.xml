@@ -8,10 +8,10 @@
             <vertex x="333" y="353"></vertex>
         </outputVertices>
         <inputPolygon>
-            <vertex x="204" y="92"></vertex>
-            <vertex x="409" y="92"></vertex>
-            <vertex x="409" y="296"></vertex>
-            <vertex x="204" y="296"></vertex>
+            <vertex x="136" y="90"></vertex>
+            <vertex x="341" y="90"></vertex>
+            <vertex x="341" y="294"></vertex>
+            <vertex x="136" y="294"></vertex>
         </inputPolygon>
     </shape>
     <shape id="1">

@@ -25,7 +25,7 @@ class ofxMtlMapping2D {
         ofxMtlMapping2D();
         virtual ~ofxMtlMapping2D();
         
-        void init(int width, int height, string mappingXmlFilePath = "mapping/xml/shapes.xml", string uiXmlFilePath = "mapping/controls/mapping.xml", int numSample = 0);
+        void init(int width, int height, string mappingXmlFilePath = "mapping/default.xml");
         void update();
         
         void    bind();
@@ -33,6 +33,9 @@ class ofxMtlMapping2D {
         void    drawFbo();
         void    draw();
         ofFbo   getOutputFbo();
+
+        void    loadMapping(string _fp) { _mappingXmlFilePath = _fp; loadShapesList(); }
+        void    saveMappingAs(string _fp) { _mappingXmlFilePath = _fp; saveShapesList(); }
 
         void mouseDragged(ofMouseEventArgs &e);
         void mousePressed(ofMouseEventArgs &e);

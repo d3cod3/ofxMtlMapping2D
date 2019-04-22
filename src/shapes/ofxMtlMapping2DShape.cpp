@@ -118,12 +118,6 @@ void ofxMtlMapping2DShape::setAsActiveShape(bool fromUI)
     // ---- OUTPUT MODE
     if(ofxMtlMapping2DControls::mapping2DControls()->mappingMode() == MAPPING_MODE_OUTPUT) {
         if (activeShape != this) {
-            // ----
-            if (shapeType == MAPPING_2D_SHAPE_MASK) {
-                ofxMtlMapping2DControls::mapping2DControls()->hideInputModeToggle();
-            } else {
-                ofxMtlMapping2DControls::mapping2DControls()->showInputModeToggle();
-            }
             
             // ----
             previousActiveShape = activeShape;

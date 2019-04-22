@@ -5,13 +5,18 @@
 //========================================================================
 int main( ){
 
-    ofAppGLFWWindow window;
-    //window.setClipboardString("rgba double samples>=4");
-    ofSetupOpenGL(&window, 1280, 1280, OF_WINDOW);			// <-------- setup the GL context
+    shared_ptr<ofApp> exampleApp(new ofApp);
 
-	// this kicks off the running of my app
-	// can be OF_WINDOW or OF_FULLSCREEN
-	// pass in width and height too:
-	ofRunApp( new ofApp());
+    ofGLFWWindowSettings settings;
+    settings.setGLVersion(2, 1);
+    settings.stencilBits = 0;
+    settings.setSize(1280,800);
+
+    shared_ptr<ofAppBaseWindow> appWindow = ofCreateWindow(settings);
+
+    ofRunApp(appWindow,exampleApp);
+    ofRunMainLoop();
+
+    return EXIT_SUCCESS;
 
 }

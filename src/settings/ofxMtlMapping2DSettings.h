@@ -2,6 +2,8 @@
 
 #include "ofMain.h"
 
+#include "ofxFontStash.h"
+
 //--------------------------------------------------------------
 class ofxMtlMapping2DSettings {
     public:
@@ -11,7 +13,7 @@ class ofxMtlMapping2DSettings {
         static const bool kIsManuallyAddingDeletingVertexEnabled;
     
         // ---
-        static ofTrueTypeFont infoFont;
+        static ofxFontStash infoFont;
     
         // ---
         static float gridDefaultNbCols;

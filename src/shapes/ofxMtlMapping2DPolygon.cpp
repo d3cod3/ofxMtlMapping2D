@@ -144,6 +144,7 @@ void ofxMtlMapping2DPolygon::draw()
 //--------------------------------------------------------------
 void ofxMtlMapping2DPolygon::drawID() 
 {
+    ofEnableAlphaBlending();
     ofSetHexColor(0x000000);
     ofFill();
     ofDrawRectangle(_centroid2D.x - 10, _centroid2D.y - 10, 20, 20);
@@ -159,7 +160,9 @@ void ofxMtlMapping2DPolygon::drawID()
         xOffset = -11;
     }
     
-    ofxMtlMapping2DSettings::infoFont.drawString(ofToString(shapeId), _centroid2D.x + xOffset, _centroid2D.y + yOffset);
+
+    ofxMtlMapping2DSettings::infoFont.draw(ofToString(shapeId),14, _centroid2D.x + xOffset, _centroid2D.y + yOffset);
+    ofDisableBlendMode();
 }
 
 
