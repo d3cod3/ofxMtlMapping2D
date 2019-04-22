@@ -47,7 +47,7 @@ void ofxMSAInteractiveObject::disableAllEvents() {
 //--------------------------------------------------------------
 void ofxMSAInteractiveObject::enableMouseEvents() {
 	ofAddListener(ofEvents().mousePressed, this, &ofxMSAInteractiveObject::_mousePressed);
-	ofAddListener(ofEvents().mouseMoved, this, &ofxMSAInteractiveObject::_mouseMoved);
+    ofAddListener(ofEvents().mouseMoved, this, &ofxMSAInteractiveObject::_mouseMoved);
 	ofAddListener(ofEvents().mouseDragged, this, &ofxMSAInteractiveObject::_mouseDragged);
 	ofAddListener(ofEvents().mouseReleased, this, &ofxMSAInteractiveObject::_mouseReleased);
 }
@@ -55,7 +55,7 @@ void ofxMSAInteractiveObject::enableMouseEvents() {
 //--------------------------------------------------------------
 void ofxMSAInteractiveObject::disableMouseEvents() {
 	ofRemoveListener(ofEvents().mousePressed, this, &ofxMSAInteractiveObject::_mousePressed);
-	ofRemoveListener(ofEvents().mouseMoved, this, &ofxMSAInteractiveObject::_mouseMoved);
+    ofRemoveListener(ofEvents().mouseMoved, this, &ofxMSAInteractiveObject::_mouseMoved);
 	ofRemoveListener(ofEvents().mouseDragged, this, &ofxMSAInteractiveObject::_mouseDragged);
 	ofRemoveListener(ofEvents().mouseReleased, this, &ofxMSAInteractiveObject::_mouseReleased);
 }

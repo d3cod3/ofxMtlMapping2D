@@ -37,7 +37,6 @@ ofxMtlMapping2D::~ofxMtlMapping2D()
 //--------------------------------------------------------------
 void ofxMtlMapping2D::init(int width, int height, string mappingXmlFilePath)
 {
-    // The first we call ofxMtlMapping2DControls::mapping2DControls() we pass the xml file to use as param.
     ofxMtlMapping2DControls::mapping2DControls()->disable();
     
     // ----
@@ -52,7 +51,7 @@ void ofxMtlMapping2D::init(int width, int height, string mappingXmlFilePath)
     loadShapesList();
     
     // ---
-    addListeners();
+    //addListeners();
 
     // canvas INPUT
     canvasInput.disableMouseInput();
@@ -464,6 +463,11 @@ void ofxMtlMapping2D::windowResized(ofResizeEventArgs &e)
 {
     ofxMtlMapping2DControls::mapping2DControls()->windowResized();
 
+    resetViewports();
+}
+
+//--------------------------------------------------------------
+void ofxMtlMapping2D::resetViewports(){
     canvasInputViewport.set(180,0,ofGetWindowWidth()-180,ofGetWindowHeight()/2 - 4);
     canvasOutputViewport.set(180,ofGetWindowHeight()/2 + 4,ofGetWindowWidth()-180,ofGetWindowHeight()/2);
 }

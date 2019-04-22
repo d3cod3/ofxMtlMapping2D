@@ -45,6 +45,12 @@ class ofxMtlMapping2D {
         void keyPressed(ofKeyEventArgs &e);
         void windowResized(ofResizeEventArgs &e);
 
+        void addListeners();
+        void removeListeners();
+
+        void resetViewports();
+        void setListenersActive(bool _a) { if(_a) addListeners(); else removeListeners(); }
+
         vector<ofPolyline*> getMaskShapes();
         void chessBoard(int nbOfCol = 10);
 
@@ -78,7 +84,5 @@ class ofxMtlMapping2D {
     
         void loadShapesList();
         void saveShapesList();
-    
-        void addListeners();
-        void removeListeners();
+
 };
