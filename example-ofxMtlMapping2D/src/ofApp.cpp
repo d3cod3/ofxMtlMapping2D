@@ -36,14 +36,14 @@ void ofApp::draw(){
 }
 
 //--------------------------------------------------------------
-void ofApp::keyPressed(int key){
-    if(key == 's'){
+void ofApp::keyPressed(ofKeyEventArgs &e){
+    if(e.key == 's'){
         // save mapping
         ofFileDialogResult saveFileResult = ofSystemSaveDialog("mapping.xml", "Save your mapping config");
         if (saveFileResult.bSuccess){
             _mapping->saveMappingAs(saveFileResult.getPath());
         }
-    }else if(key == 'l'){
+    }else if(e.key == 'l'){
         // load mapping
         ofFileDialogResult openFileResult= ofSystemLoadDialog("Select a mapping file");
         if (openFileResult.bSuccess){
@@ -52,41 +52,28 @@ void ofApp::keyPressed(int key){
     }
 }
 
-//--------------------------------------------------------------
-void ofApp::keyReleased(int key){
 
+//--------------------------------------------------------------
+void ofApp::mouseDragged(ofMouseEventArgs &e){
+    _mapping->mouseDragged(e);
 }
 
 //--------------------------------------------------------------
-void ofApp::mouseMoved(int x, int y ){
-
+void ofApp::mousePressed(ofMouseEventArgs &e){
+    _mapping->mousePressed(e);
 }
 
 //--------------------------------------------------------------
-void ofApp::mouseDragged(int x, int y, int button){
-
+void ofApp::mouseReleased(ofMouseEventArgs &e){
+    _mapping->mouseReleased(e);
 }
 
 //--------------------------------------------------------------
-void ofApp::mousePressed(int x, int y, int button){
+void ofApp::mouseScrolled(ofMouseEventArgs &e){
+    _mapping->mouseScrolled(e);
 }
 
 //--------------------------------------------------------------
-void ofApp::mouseReleased(int x, int y, int button){
-
-}
-
-//--------------------------------------------------------------
-void ofApp::windowResized(int w, int h){
-
-}
-
-//--------------------------------------------------------------
-void ofApp::gotMessage(ofMessage msg){
-
-}
-
-//--------------------------------------------------------------
-void ofApp::dragEvent(ofDragInfo dragInfo){ 
-
+void ofApp::windowResized(ofResizeEventArgs &e){
+    _mapping->windowResized(e);
 }

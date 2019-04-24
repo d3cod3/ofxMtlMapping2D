@@ -5,22 +5,22 @@
 
 class ofApp : public ofBaseApp{
 
-	public:
-		void setup();
-		void update();
-		void draw();
+public:
+    void            setup();
+    void            update();
+    void            draw();
 
-		void keyPressed  (int key);
-		void keyReleased(int key);
-		void mouseMoved(int x, int y );
-		void mouseDragged(int x, int y, int button);
-		void mousePressed(int x, int y, int button);
-		void mouseReleased(int x, int y, int button);
-		void windowResized(int w, int h);
-		void dragEvent(ofDragInfo dragInfo);
-		void gotMessage(ofMessage msg);
-	
-    private:
-        ofxMtlMapping2D* _mapping;
+    void            keyPressed(ofKeyEventArgs &e);
+
+    void            mouseDragged(ofMouseEventArgs &e);
+    void            mousePressed(ofMouseEventArgs &e);
+    void            mouseReleased(ofMouseEventArgs &e);
+    void            mouseScrolled(ofMouseEventArgs &e);
+
+    void            windowResized(ofResizeEventArgs &e);
+
+private:
+
+    ofxMtlMapping2D* _mapping;
 
 };

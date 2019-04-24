@@ -111,6 +111,12 @@ void ofxMtlMapping2D::update()
         createQuad(ofGetWidth()/2, ofGetHeight()/2);
         return;
     }
+
+    if(ofxMtlMapping2DControls::mapping2DControls()->createNewEllipse()) {
+        ofxMtlMapping2DControls::mapping2DControls()->resetCreateNewShape();
+        createEllipse(ofGetWidth()/2, ofGetHeight()/2);
+        return;
+    }
     
     if(ofxMtlMapping2DControls::mapping2DControls()->createNewGrid()) {
         ofxMtlMapping2DControls::mapping2DControls()->resetCreateNewShape();
@@ -359,6 +365,19 @@ void ofxMtlMapping2D::createQuad(float _x, float _y)
     ofxMtlMapping2DShapes::pmShapes.push_front(newShape);
     
     ofxMtlMapping2DControls::mapping2DControls()->addShapeToList(ofxMtlMapping2DShape::nextShapeId, MAPPING_2D_SHAPE_QUAD);
+}
+
+//--------------------------------------------------------------
+void ofxMtlMapping2D::createEllipse(float _x, float _y)
+{
+    ofxMtlMapping2DShape::nextShapeId++;
+
+    ofxMtlMapping2DShape* newShape = new ofxMtlMapping2DEllipse();
+    newShape->shapeType = MAPPING_2D_SHAPE_ELLIPSE;
+    newShape->init(ofxMtlMapping2DShape::nextShapeId, true);
+    ofxMtlMapping2DShapes::pmShapes.push_front(newShape);
+    
+    ofxMtlMapping2DControls::mapping2DControls()->addShapeToList(ofxMtlMapping2DShape::nextShapeId, MAPPING_2D_SHAPE_ELLIPSE);
 }
 
 //--------------------------------------------------------------

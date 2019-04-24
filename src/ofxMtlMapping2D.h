@@ -10,6 +10,7 @@
 //Mapping
 #include "ofxMtlMapping2DVertex.h"
 #include "ofxMtlMapping2DQuad.h"
+#include "ofxMtlMapping2DEllipse.h"
 #include "ofxMtlMapping2DGrid.h"
 #include "ofxMtlMapping2DTriangle.h"
 #include "ofxMtlMapping2DMask.h"
@@ -77,6 +78,7 @@ class ofxMtlMapping2D {
         void render();
     
         void createQuad(float _x, float _y);
+        void createEllipse(float _x, float _y);
         void createGrid(float _x, float _y);
         void createTriangle(float _x, float _y);
         void createMask(float _x, float _y);

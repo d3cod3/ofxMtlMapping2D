@@ -56,6 +56,7 @@ ofxMtlMapping2DControls::ofxMtlMapping2DControls(int width){
     
     // ---- Tool box
     shapeTypesAsString[MAPPING_2D_SHAPE_QUAD] = "quad";
+    shapeTypesAsString[MAPPING_2D_SHAPE_ELLIPSE] = "ellipse";
     shapeTypesAsString[MAPPING_2D_SHAPE_GRID] = "grid";
     shapeTypesAsString[MAPPING_2D_SHAPE_TRIANGLE] = "triangle";
     shapeTypesAsString[MAPPING_2D_SHAPE_MASK] = "mask";
@@ -65,6 +66,7 @@ ofxMtlMapping2DControls::ofxMtlMapping2DControls(int width){
     _loadMapping = false;
     _editShapes = false;
     _createNewQuad = false;
+    _createNewEllipse = false;
     _createNewGrid = false;
     _createNewTriangle = false;
     _createNewMask = false;
@@ -79,6 +81,7 @@ ofxMtlMapping2DControls::ofxMtlMapping2DControls(int width){
     // add mapping shape controls
     if (ofxMtlMapping2DSettings::kIsManuallyCreatingShapeEnabled) {
         _toolsCanvas->addWidgetDown(new ofxUIImageToggle(kToggleSize, kToggleSize, _createNewQuad, "GUI/quad.png", kSettingMappingCreateNewQuad));
+        //_toolsCanvas->addWidgetDown(new ofxUIImageToggle(kToggleSize, kToggleSize, _createNewEllipse, "GUI/quad.png", kSettingMappingCreateNewEllipse));
         _toolsCanvas->addWidgetDown(new ofxUIImageToggle(kToggleSize, kToggleSize, _createNewGrid, "GUI/grid.png", kSettingMappingCreateNewGrid));
         _toolsCanvas->addWidgetDown(new ofxUIImageToggle(kToggleSize, kToggleSize, _createNewTriangle, "GUI/triangle.png", kSettingMappingCreateNewTriangle));
         _toolsCanvas->addWidgetDown(new ofxUIImageToggle(kToggleSize, kToggleSize, _createNewMask, "GUI/mask.png", kSettingMappingCreateNewMask));
@@ -105,6 +108,12 @@ void ofxMtlMapping2DControls::toolsUiEvent(ofxUIEventArgs &event){
             _createNewQuad = true;
         }
     }
+    /*else if (name == kSettingMappingCreateNewEllipse) {
+        // will happen only if ofxMtlMapping2DSettings::kIsManuallyCreatingShapeEnabled is true
+        if(getToggleValue(name)) {
+            _createNewEllipse = true;
+        }
+    }*/
     else if (name == kSettingMappingCreateNewGrid) {
         // will happen only if ofxMtlMapping2DSettings::kIsManuallyCreatingShapeEnabled is true
         if(getToggleValue(name)) {
@@ -167,6 +176,7 @@ void ofxMtlMapping2DControls::setUIShapeEditingState(bool isOn)
     
     // ----
     ((ofxUIImageToggle *)_toolsCanvas->getWidget(kSettingMappingCreateNewQuad))->setVisible(_editShapes);
+    //((ofxUIImageToggle *)_toolsCanvas->getWidget(kSettingMappingCreateNewEllipse))->setVisible(_editShapes);
     ((ofxUIImageToggle *)_toolsCanvas->getWidget(kSettingMappingCreateNewGrid))->setVisible(_editShapes);
     ((ofxUIImageToggle *)_toolsCanvas->getWidget(kSettingMappingCreateNewTriangle))->setVisible(_editShapes);
     ((ofxUIImageToggle *)_toolsCanvas->getWidget(kSettingMappingCreateNewMask))->setVisible(_editShapes);
@@ -344,6 +354,9 @@ void ofxMtlMapping2DControls::resetCreateNewShape()
 {
     _createNewQuad = false;
     ((ofxUIToggle *)_toolsCanvas->getWidget(kSettingMappingCreateNewQuad))->setValue(false);
+
+    //_createNewEllipse = false;
+    //((ofxUIToggle *)_toolsCanvas->getWidget(kSettingMappingCreateNewEllipse))->setValue(false);
     
     _createNewGrid = false;
     ((ofxUIToggle *)_toolsCanvas->getWidget(kSettingMappingCreateNewGrid))->setValue(false);
