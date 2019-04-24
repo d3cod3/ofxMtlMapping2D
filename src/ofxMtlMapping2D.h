@@ -31,6 +31,9 @@ class ofxMtlMapping2D {
         
         void    bind();
         void    unbind();
+        void    bindBackground();
+        void    unbindBackground();
+        void    drawBackground();
         void    drawFbo();
         void    draw();
         ofFbo   getOutputFbo();
@@ -72,6 +75,10 @@ class ofxMtlMapping2D {
         string _mappingXmlFilePath;
         ofFbo _fbo;
         ofFbo _outputFbo;
+        ofFbo _backgroundFbo;
+
+        float _fboW, _fboH;
+
         ofxXmlSettings _shapesListXML;
         list<ofxMtlMapping2DShape*>::iterator iteratorForShapeWithId(int shapeId);
 
@@ -80,6 +87,7 @@ class ofxMtlMapping2D {
         void createQuad(float _x, float _y);
         void createEllipse(float _x, float _y);
         void createGrid(float _x, float _y);
+        void createGrid(float _x, float _y,float _w, float _h);
         void createTriangle(float _x, float _y);
         void createMask(float _x, float _y);
         void deleteShape();

@@ -40,8 +40,12 @@ void ofxMtlMapping2D::init(int width, int height, string mappingXmlFilePath)
     ofxMtlMapping2DControls::mapping2DControls()->disable();
     
     // ----
+    _fboW = width;
+    _fboH = height;
+
     _fbo.allocate(width, height, GL_RGBA, 0);
     _outputFbo.allocate(width, height, GL_RGBA, 0);
+    _backgroundFbo.allocate(width, height, GL_RGBA, 0);
 
     // ----
     ofxMtlMapping2DSettings::infoFont.setup(ofToDataPath("fonts/IBMPlexSans-Text.otf"),1.0,2048,true,8,3.0f);
@@ -120,7 +124,7 @@ void ofxMtlMapping2D::update()
     
     if(ofxMtlMapping2DControls::mapping2DControls()->createNewGrid()) {
         ofxMtlMapping2DControls::mapping2DControls()->resetCreateNewShape();
-        createGrid(ofGetWidth()/2, ofGetHeight()/2);
+        createGrid(ofGetWidth()/2, ofGetHeight()/2,_fboW,_fboH);
         return;
     }
     
@@ -245,7 +249,7 @@ void ofxMtlMapping2D::draw()
     ofDrawLine(178,ofGetWindowHeight()/2,ofGetWindowWidth(),ofGetWindowHeight()/2);
     ofDrawLine(176,0,176,ofGetWindowHeight());
     ofSetLineWidth(1);
-    ofDisableBlendMode();
+    ofDisableAlphaBlending();
 
     // OUTPUT
     canvasOutput.begin(canvasOutputViewport);
@@ -290,6 +294,29 @@ void ofxMtlMapping2D::unbind()
 }
 
 //--------------------------------------------------------------
+void ofxMtlMapping2D::bindBackground()
+{
+    _backgroundFbo.begin();
+    ofClear(.0f, .0f, .0f, .0f);
+    ofClearAlpha();
+}
+
+//--------------------------------------------------------------
+void ofxMtlMapping2D::unbindBackground()
+{
+    _backgroundFbo.end();
+}
+
+//--------------------------------------------------------------
+void ofxMtlMapping2D::drawBackground()
+{
+    ofEnableAlphaBlending();
+    ofSetColor(255);
+    _backgroundFbo.draw(0, 0);
+    ofDisableAlphaBlending();
+}
+
+//--------------------------------------------------------------
 void ofxMtlMapping2D::drawFbo()
 {
     glColor3f(1.0f, 1.0f, 1.0f);
@@ -321,6 +348,9 @@ void ofxMtlMapping2D::render(){
     _outputFbo.begin();
     ofClear(.0f, .0f, .0f, .0f);
     ofClearAlpha();
+
+    ofSetColor(255);
+    drawBackground();
     
     // Textured shapes
     list<ofxMtlMapping2DShape*>::iterator it;
@@ -347,8 +377,8 @@ void ofxMtlMapping2D::render(){
 
     _outputFbo.end();
 
-    glColor3f(1.0f, 1.0f, 1.0f);
     _outputFbo.draw(0,0);
+
 }
 
 
@@ -390,6 +420,19 @@ void ofxMtlMapping2D::createGrid(float _x, float _y)
     newShape->init(ofxMtlMapping2DShape::nextShapeId, true);
     ofxMtlMapping2DShapes::pmShapes.push_front(newShape);
     
+    ofxMtlMapping2DControls::mapping2DControls()->addShapeToList(ofxMtlMapping2DShape::nextShapeId, MAPPING_2D_SHAPE_GRID);
+}
+
+//--------------------------------------------------------------
+void ofxMtlMapping2D::createGrid(float _x, float _y, float _w, float _h)
+{
+    ofxMtlMapping2DShape::nextShapeId++;
+
+    ofxMtlMapping2DShape* newShape = new ofxMtlMapping2DGrid();
+    newShape->shapeType = MAPPING_2D_SHAPE_GRID;
+    newShape->init(ofxMtlMapping2DShape::nextShapeId, true);
+    ofxMtlMapping2DShapes::pmShapes.push_front(newShape);
+
     ofxMtlMapping2DControls::mapping2DControls()->addShapeToList(ofxMtlMapping2DShape::nextShapeId, MAPPING_2D_SHAPE_GRID);
 }
 

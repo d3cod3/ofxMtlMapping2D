@@ -15,6 +15,8 @@ class ofxMtlMapping2DGrid: public ofxMtlMapping2DShape {
         void draw();
     
         void updateGrid();
+
+
     
         int getNbCols() { return gridNbCols; }
         int getNbRows() { return gridNbRows; }
@@ -44,4 +46,5 @@ class ofxMtlMapping2DGrid: public ofxMtlMapping2DShape {
         float gridQuadHeight;
         float gridCellWidth;
         float gridCellHeight;
+
 };

@@ -23,6 +23,8 @@ class ofxMtlMapping2DPolygon : public ofxMSAInteractiveObject {
         static int activeVertexId;
         static void resetActivePolygonVars();
 
+        float fboW, fboH;
+
         // ----
         ofxMtlMapping2DPolygon();
         ~ofxMtlMapping2DPolygon();
@@ -34,6 +36,8 @@ class ofxMtlMapping2DPolygon : public ofxMSAInteractiveObject {
         ofRectangle boundingBox;
 
         void init(int sId, bool defaultShape = false);
+
+        void setWH(float _w, float _h) { fboW=_w; fboH=_h; }
         
         void update();
         void draw();
