@@ -96,3 +96,5 @@ bin/.tmp
 obj/
 **/build-example-ofxMtlMapping2D-Desktop-Debug
 **/build-example-ofxMtlMapping2D-Desktop-Release
+example-ofxMtlMapping2D/example-ofxMtlMapping2D.qbs.user
+*.user
