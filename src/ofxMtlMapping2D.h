@@ -27,6 +27,7 @@ class ofxMtlMapping2D {
         virtual ~ofxMtlMapping2D();
         
         void init(int width, int height, string mappingXmlFilePath = "mapping/default.xml");
+        void reset(int width, int height);
         void update();
         
         void    bind();

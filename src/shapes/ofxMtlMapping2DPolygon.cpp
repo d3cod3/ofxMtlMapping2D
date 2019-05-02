@@ -27,6 +27,9 @@ ofxMtlMapping2DPolygon::ofxMtlMapping2DPolygon()
     // ----
     polyline = new ofPolyline();
     shapeId = -1;
+
+    fboW = ofGetWidth();
+    fboH = ofGetHeight();
 }
 
 //--------------------------------------------------------------
@@ -162,7 +165,7 @@ void ofxMtlMapping2DPolygon::drawID()
     
 
     ofxMtlMapping2DSettings::infoFont.draw(ofToString(shapeId),14, _centroid2D.x + xOffset, _centroid2D.y + yOffset);
-    ofDisableBlendMode();
+    ofDisableAlphaBlending();
 }
 
 

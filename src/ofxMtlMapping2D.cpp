@@ -35,6 +35,17 @@ ofxMtlMapping2D::~ofxMtlMapping2D()
 }
 
 //--------------------------------------------------------------
+void ofxMtlMapping2D::reset(int width, int height){
+    // ----
+    _fboW = width;
+    _fboH = height;
+
+    _fbo.allocate(width, height, GL_RGBA, 0);
+    _outputFbo.allocate(width, height, GL_RGBA, 0);
+    _backgroundFbo.allocate(width, height, GL_RGBA, 0);
+}
+
+//--------------------------------------------------------------
 void ofxMtlMapping2D::init(int width, int height, string mappingXmlFilePath)
 {
     ofxMtlMapping2DControls::mapping2DControls()->disable();
@@ -124,7 +135,7 @@ void ofxMtlMapping2D::update()
     
     if(ofxMtlMapping2DControls::mapping2DControls()->createNewGrid()) {
         ofxMtlMapping2DControls::mapping2DControls()->resetCreateNewShape();
-        createGrid(ofGetWidth()/2, ofGetHeight()/2,_fboW,_fboH);
+        createGrid(_fboW/2, _fboH/2,_fboW,_fboH);
         return;
     }
     
@@ -430,6 +441,7 @@ void ofxMtlMapping2D::createGrid(float _x, float _y, float _w, float _h)
 
     ofxMtlMapping2DShape* newShape = new ofxMtlMapping2DGrid();
     newShape->shapeType = MAPPING_2D_SHAPE_GRID;
+    newShape->setWH(_w,_h);
     newShape->init(ofxMtlMapping2DShape::nextShapeId, true);
     ofxMtlMapping2DShapes::pmShapes.push_front(newShape);
 
