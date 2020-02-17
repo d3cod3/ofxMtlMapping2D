@@ -13,6 +13,7 @@ ofxMtlMapping2DVertex::ofxMtlMapping2DVertex()
 	enabled = false;
     bIsOnAnEdge = true;
     edgeIndex = -1;
+    draggingVertex = false;
 	
 	//Vertex
 	setSize(30, 30);
@@ -49,7 +50,13 @@ void ofxMtlMapping2DVertex::kill()
 //--------------------------------------------------------------
 void ofxMtlMapping2DVertex::update()
 {
-    
+    if(draggingVertex){
+        if(activeVertex == this) {
+            this->x = x - width/2;
+            this->y = y - height/2;
+            updateCenter();
+        }
+    }
 }
 
 //--------------------------------------------------------------
@@ -152,23 +159,14 @@ void ofxMtlMapping2DVertex::onMouseMove(int x, int y)
 }
 
 //--------------------------------------------------------------
-void ofxMtlMapping2DVertex::onDragOver(int x, int y, int button) 
-{
-	if(activeVertex == this) {
-		this->x = x - width/2;
-		this->y = y - height/2;
-		updateCenter();
-	}
-}
+void ofxMtlMapping2DVertex::mouseDragged(int x, int y, int button){
+    if(activeVertex == this) {
+        this->x = x - width/2;
+        this->y = y - height/2;
+        updateCenter();
+    }
 
-//--------------------------------------------------------------
-void ofxMtlMapping2DVertex::onDragOutside(int x, int y, int button) 
-{
-	if(activeVertex == this) {
-		this->x = x - width/2;
-		this->y = y - height/2;
-		updateCenter();
-	}
+    draggingVertex = true;
 }
 
 //--------------------------------------------------------------
@@ -188,6 +186,8 @@ void ofxMtlMapping2DVertex::onPressOutside(int x, int y, int button)
     if(activeVertex == this) {
 		activeVertex = NULL;
 	}
+
+    draggingVertex = false;
 }
 
 //--------------------------------------------------------------

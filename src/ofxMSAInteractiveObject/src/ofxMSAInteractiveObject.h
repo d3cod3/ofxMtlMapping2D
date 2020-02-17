@@ -102,6 +102,8 @@ public:
 	void _keyPressed(ofKeyEventArgs &e);
 	void _keyReleased(ofKeyEventArgs &e);
 
+    bool    lockDrag;
+
 private:
 	bool            _isMouseOver;       // is mouse over the rect
     std::map<int, bool>    _isMousePressed;       // is mouse down over the rect (for any given mouse button)

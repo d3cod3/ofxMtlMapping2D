@@ -33,8 +33,7 @@ public:
     virtual void onRollOver(int x, int y);
     virtual void onRollOut();
     virtual void onMouseMove(int x, int y);
-    virtual void onDragOver(int x, int y, int button);
-    virtual void onDragOutside(int x, int y, int button);
+    virtual void mouseDragged(int x, int y, int button);
     virtual void onPress(int x, int y, int button);
     virtual void onPressOutside(int x, int y, int button);
     virtual void onRelease(int x, int y, int button);
@@ -46,6 +45,7 @@ public:
     int index;
     bool bIsOnAnEdge;
     int edgeIndex;
+    bool draggingVertex;
     
     void setAsActive();
     

@@ -18,6 +18,8 @@ ofxMSAInteractiveObject::ofxMSAInteractiveObject() {
 	enabled		= true;
 	verbose		= false;
     _stateChangeTimestampMillis = 0;
+
+    lockDrag = false;
 	
 	enableAppEvents();
 	disableMouseEvents();
@@ -146,7 +148,7 @@ unsigned long ofxMSAInteractiveObject::getStateChangeMillis() const {
 
 //--------------------------------------------------------------
 bool ofxMSAInteractiveObject::hitTest(int tx, int ty) const {
-	return ((tx > x) && (tx < x + width) && (ty > y) && (ty < y + height));
+    return ((tx > x) && (tx < x + (width*2)) && (ty > y) && (ty < y + (height*2)));
 }
 
 
@@ -172,6 +174,11 @@ void ofxMSAInteractiveObject::_update(ofEventArgs &e) {
 //		
 //		oldRect =  (ofRectangle) (*this);
 //	}
+
+    if(lockDrag){
+        mouseDragged(getMouseX(), getMouseY(), 0);
+    }
+
 	update();
 }
 
@@ -241,9 +248,10 @@ void ofxMSAInteractiveObject::_mousePressed(ofMouseEventArgs &e) {
     }
 
 	if(hitTest(x, y)) {						// if mouse is over
-		if(!isMousePressed(button)) {						 // if wasn't down previous frame
+        lockDrag = true;
+        if(!isMousePressed(button)) {						 // if wasn't down previous frame
 			_isMousePressed[button] = true;						// update flag
-			onPress(x, y, button);					// call onPress
+			onPress(x, y, button);					// call onPress 
 		}
 	} else {								// if mouse is not over
         _isMousePressed[button] = false;	// update flag
@@ -322,6 +330,8 @@ void ofxMSAInteractiveObject::_mouseReleased(ofMouseEventArgs &e) {
 	_isMousePressed[button] = false;
 
     _stateChangeTimestampMillis = ofGetElapsedTimeMillis();
+
+    lockDrag = false;
     
     mouseReleased(x, y, button);
 }

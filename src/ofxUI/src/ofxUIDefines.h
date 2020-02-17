@@ -31,7 +31,7 @@
 #ifdef TARGET_OF_IOS
     #define OFX_UI_FONT_NAME "GUI/Helvetica.ttf"
 #else
-    #define OFX_UI_FONT_NAME "fonts/IBMPlexSans-Text.otf"
+    #define OFX_UI_FONT_NAME "fonts/IBMPlexMono-Medium.ttf"
 #endif
 
 #define OFX_UI_FONT_RESOLUTION 150

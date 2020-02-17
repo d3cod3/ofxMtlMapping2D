@@ -59,7 +59,7 @@ void ofxMtlMapping2D::init(int width, int height, string mappingXmlFilePath)
     _backgroundFbo.allocate(width, height, GL_RGBA, 0);
 
     // ----
-    ofxMtlMapping2DSettings::infoFont.setup(ofToDataPath("fonts/IBMPlexSans-Text.otf"),1.0,2048,true,8,3.0f);
+    ofxMtlMapping2DSettings::infoFont.setup(ofToDataPath("fonts/IBMPlexMono-Medium.ttf"),1.0,2048,true,8,3.0f);
     
     // ----
     _mappingXmlFilePath = mappingXmlFilePath;
@@ -548,6 +548,50 @@ void ofxMtlMapping2D::resetViewports(){
 
 //--------------------------------------------------------------
 void ofxMtlMapping2D::mouseDragged(ofMouseEventArgs &e){
+
+    int eX = e.x;
+    int eY = e.y;
+    int eButton = e.button;
+
+    // ----
+    // A vertex has been selected
+    if (ofxMtlMapping2DVertex::activeVertex || eButton == 2) {
+      return;
+    }
+
+    if(canvasInputViewport.inside(ofVec3f(eX,eY,0))){
+        isInputActive       = true;
+    }
+
+    if(canvasOutputViewport.inside(ofVec3f(eX,eY,0))){
+        isInputActive       = false;
+    }
+
+    // ----
+    // a shape has been selected
+    list<ofxMtlMapping2DShape*>::iterator it;
+    for (it=ofxMtlMapping2DShapes::pmShapes.begin(); it!=ofxMtlMapping2DShapes::pmShapes.end(); it++) {
+        ofxMtlMapping2DShape* shape = *it;
+        bool grabbedOne = false;
+        if(!isInputActive) {
+            if(shape->hitTest(actualMouse.x,actualMouse.y)) {
+                grabbedOne = true;
+            }
+        } else if (isInputActive) {
+            if (shape->inputPolygon || shape->shapeType != MAPPING_2D_SHAPE_MASK) {
+                if(shape->inputPolygon->hitTest(actualMouse.x,actualMouse.y)) {
+                    grabbedOne = true;
+                }
+            }
+        }
+
+        if(grabbedOne) {
+            // do not drag canvas
+            return;
+        }
+    }
+
+
     canvasInput.mouseDragged(e);
     canvasOutput.mouseDragged(e);
 }
@@ -558,6 +602,12 @@ void ofxMtlMapping2D::mousePressed(ofMouseEventArgs &e)
     int eX = e.x;
     int eY = e.y;
     int eButton = e.button;
+
+    // ----
+    // A vertex has been selected
+    if (ofxMtlMapping2DVertex::activeVertex || eButton == 2) {
+      return;
+    }
 
     if(canvasInputViewport.inside(ofVec3f(e.x,e.y,0))){
         isInputActive       = true;
@@ -581,12 +631,6 @@ void ofxMtlMapping2D::mousePressed(ofMouseEventArgs &e)
     if(!ofxMtlMapping2DControls::mapping2DControls()->editShapes())
         return;
     
-    
-    // ----
-    // A vertex has been selected
-    if (ofxMtlMapping2DVertex::activeVertex || eButton == 2) {
-      return;
-    }
     
     // ----
     // Select an existing shape
