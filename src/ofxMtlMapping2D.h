@@ -63,10 +63,12 @@ class ofxMtlMapping2D {
         ofxInfiniteCanvas       canvasInput;
         ofEasyCam               easyCamInput;
         ofRectangle             canvasInputViewport;
+        ofRectangle             canvasInputViewportAlone;
 
         ofxInfiniteCanvas       canvasOutput;
         ofEasyCam               easyCamOutput;
         ofRectangle             canvasOutputViewport;
+        ofRectangle             canvasOutputViewportAlone;
 
         ofVec2f                 actualMouse;
 

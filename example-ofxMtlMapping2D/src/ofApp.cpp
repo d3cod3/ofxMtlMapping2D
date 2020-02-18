@@ -37,6 +37,9 @@ void ofApp::draw(){
 
 //--------------------------------------------------------------
 void ofApp::keyPressed(ofKeyEventArgs &e){
+
+    _mapping->keyPressed(e);
+
     if(e.key == 's'){
         // save mapping
         ofFileDialogResult saveFileResult = ofSystemSaveDialog("mapping.xml", "Save your mapping config");

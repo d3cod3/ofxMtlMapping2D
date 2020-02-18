@@ -15,6 +15,12 @@
 #define kSettingMappingCreateNewTriangle    "MAPPING:CREATE_NEW_TRIANGLE"
 #define kSettingMappingCreateNewMask        "MAPPING:CREATE_NEW_MASK"
 
+#define kSettingMappingShowShapesId         "MAPPING:SHOW_SHAPES_ID"
+
+#define kSettingMappingModeDual             "MAPPING_MODE:DUAL"
+#define kSettingMappingModeOutput           "MAPPING_MODE:OUTPUT"
+#define kSettingMappingModeInput            "MAPPING_MODE:INPUT"
+
 
 //--------------------------------------------------------------
 //--------------------------------------------------------------
@@ -43,6 +49,8 @@ class ofxMtlMapping2DControls
         const bool& createNewMask() { return _createNewMask; }
         void resetCreateNewShape();
         const bool& showShapesId() { return _showShapesId; }
+
+        const int& getVisualizerMode() { return visualizerMode; }
     
         const bool& mappingModeChanged() { return _mappingModeChanged; }
         ofxMtlMapping2DMode mappingMode() { return _mappingMode; }
@@ -69,6 +77,8 @@ class ofxMtlMapping2DControls
     
         void unselectShapesToggles();
         void windowResized();
+
+        int visualizerMode;
 
     protected:
         ofxUIScrollableCanvas *_toolsCanvas;

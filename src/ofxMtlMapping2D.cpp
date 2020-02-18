@@ -75,6 +75,7 @@ void ofxMtlMapping2D::init(int width, int height, string mappingXmlFilePath)
     easyCamInput.enableOrtho();
 
     canvasInputViewport.set(180,0,ofGetWindowWidth()-180,ofGetWindowHeight()/2 - 4);
+    canvasInputViewportAlone.set(180,0,ofGetWindowWidth()-180,ofGetWindowHeight());
 
     // canvas OUTPUT
     canvasOutput.disableMouseInput();
@@ -83,6 +84,7 @@ void ofxMtlMapping2D::init(int width, int height, string mappingXmlFilePath)
     easyCamOutput.enableOrtho();
 
     canvasOutputViewport.set(180,ofGetWindowHeight()/2 + 4,ofGetWindowWidth()-180,ofGetWindowHeight()/2);
+    canvasOutputViewportAlone.set(180,0,ofGetWindowWidth()-180,ofGetWindowHeight());
 
     isInputActive   = false;
     isFocusChanged  = false;
@@ -231,60 +233,129 @@ void ofxMtlMapping2D::update()
 void ofxMtlMapping2D::draw()
 {
 
-    // INPUT
-    canvasInput.begin(canvasInputViewport);
 
-    drawFbo();
-    if(ofxMtlMapping2DControls::mapping2DControls()->editShapes() && isInputActive) {
+    if(ofxMtlMapping2DControls::mapping2DControls()->getVisualizerMode() == 0){ // INPUT ONLY
+        // INPUT
+        canvasInput.begin(canvasInputViewportAlone);
 
-        list<ofxMtlMapping2DShape*>::iterator it;
-        for (it=ofxMtlMapping2DShapes::pmShapes.begin(); it!=ofxMtlMapping2DShapes::pmShapes.end(); it++) {
-            ofxMtlMapping2DShape* shape = *it;
+        drawFbo();
+        if(ofxMtlMapping2DControls::mapping2DControls()->editShapes() && isInputActive) {
 
-            if(shape != ofxMtlMapping2DShape::activeShape) {
-                shape->draw();
+            list<ofxMtlMapping2DShape*>::iterator it;
+            for (it=ofxMtlMapping2DShapes::pmShapes.begin(); it!=ofxMtlMapping2DShapes::pmShapes.end(); it++) {
+                ofxMtlMapping2DShape* shape = *it;
+
+                if(shape != ofxMtlMapping2DShape::activeShape) {
+                    shape->draw();
+                }
+            }
+
+            if(ofxMtlMapping2DShape::activeShape) {
+                //Draw active shape on top
+                ofxMtlMapping2DShape::activeShape->draw();
             }
         }
 
-        if(ofxMtlMapping2DShape::activeShape) {
-            //Draw active shape on top
-            ofxMtlMapping2DShape::activeShape->draw();
-        }
-    }
+        canvasInput.end();
 
-    canvasInput.end();
+        ofEnableAlphaBlending();
+        ofSetColor(0, 210, 255, 90);
+        ofSetLineWidth(4);
+        ofDrawLine(176,0,176,ofGetWindowHeight());
+        ofSetLineWidth(1);
+        ofDisableAlphaBlending();
+        ofSetColor(255);
 
-    ofEnableAlphaBlending();
-    ofSetColor(0, 210, 255, 90);
-    ofSetLineWidth(4);
-    ofDrawLine(178,ofGetWindowHeight()/2,ofGetWindowWidth(),ofGetWindowHeight()/2);
-    ofDrawLine(176,0,176,ofGetWindowHeight());
-    ofSetLineWidth(1);
-    ofDisableAlphaBlending();
+    }else if(ofxMtlMapping2DControls::mapping2DControls()->getVisualizerMode() == 1){ // OUTPUT ONLY
+        canvasOutput.begin(canvasOutputViewportAlone);
 
-    // OUTPUT
-    canvasOutput.begin(canvasOutputViewport);
+        render();
 
-    render();
+        if(ofxMtlMapping2DControls::mapping2DControls()->editShapes() && !isInputActive) {
 
-    if(ofxMtlMapping2DControls::mapping2DControls()->editShapes() && !isInputActive) {
+            list<ofxMtlMapping2DShape*>::iterator it;
+            for (it=ofxMtlMapping2DShapes::pmShapes.begin(); it!=ofxMtlMapping2DShapes::pmShapes.end(); it++) {
+                ofxMtlMapping2DShape* shape = *it;
 
-        list<ofxMtlMapping2DShape*>::iterator it;
-        for (it=ofxMtlMapping2DShapes::pmShapes.begin(); it!=ofxMtlMapping2DShapes::pmShapes.end(); it++) {
-            ofxMtlMapping2DShape* shape = *it;
+                if(shape != ofxMtlMapping2DShape::activeShape) {
+                    shape->draw();
+                }
+            }
 
-            if(shape != ofxMtlMapping2DShape::activeShape) {
-                shape->draw();
+            if(ofxMtlMapping2DShape::activeShape) {
+                //Draw active shape on top
+                ofxMtlMapping2DShape::activeShape->draw();
             }
         }
 
-        if(ofxMtlMapping2DShape::activeShape) {
-            //Draw active shape on top
-            ofxMtlMapping2DShape::activeShape->draw();
+        canvasOutput.end();
+
+        ofEnableAlphaBlending();
+        ofSetColor(0, 210, 255, 90);
+        ofSetLineWidth(4);
+        ofDrawLine(176,0,176,ofGetWindowHeight());
+        ofSetLineWidth(1);
+        ofDisableAlphaBlending();
+        ofSetColor(255);
+
+    }else if(ofxMtlMapping2DControls::mapping2DControls()->getVisualizerMode() == 2){ // DUAL VIEW
+        // INPUT
+        canvasInput.begin(canvasInputViewport);
+
+        drawFbo();
+        if(ofxMtlMapping2DControls::mapping2DControls()->editShapes() && isInputActive) {
+
+            list<ofxMtlMapping2DShape*>::iterator it;
+            for (it=ofxMtlMapping2DShapes::pmShapes.begin(); it!=ofxMtlMapping2DShapes::pmShapes.end(); it++) {
+                ofxMtlMapping2DShape* shape = *it;
+
+                if(shape != ofxMtlMapping2DShape::activeShape) {
+                    shape->draw();
+                }
+            }
+
+            if(ofxMtlMapping2DShape::activeShape) {
+                //Draw active shape on top
+                ofxMtlMapping2DShape::activeShape->draw();
+            }
         }
+
+        canvasInput.end();
+
+        ofEnableAlphaBlending();
+        ofSetColor(0, 210, 255, 90);
+        ofSetLineWidth(4);
+        ofDrawLine(178,ofGetWindowHeight()/2,ofGetWindowWidth(),ofGetWindowHeight()/2);
+        ofDrawLine(176,0,176,ofGetWindowHeight());
+        ofSetLineWidth(1);
+        ofDisableAlphaBlending();
+
+        // OUTPUT
+        canvasOutput.begin(canvasOutputViewport);
+
+        render();
+
+        if(ofxMtlMapping2DControls::mapping2DControls()->editShapes() && !isInputActive) {
+
+            list<ofxMtlMapping2DShape*>::iterator it;
+            for (it=ofxMtlMapping2DShapes::pmShapes.begin(); it!=ofxMtlMapping2DShapes::pmShapes.end(); it++) {
+                ofxMtlMapping2DShape* shape = *it;
+
+                if(shape != ofxMtlMapping2DShape::activeShape) {
+                    shape->draw();
+                }
+            }
+
+            if(ofxMtlMapping2DShape::activeShape) {
+                //Draw active shape on top
+                ofxMtlMapping2DShape::activeShape->draw();
+            }
+        }
+
+        canvasOutput.end();
     }
 
-    canvasOutput.end();
+
     
 }
 
@@ -544,6 +615,9 @@ void ofxMtlMapping2D::windowResized(ofResizeEventArgs &e)
 void ofxMtlMapping2D::resetViewports(){
     canvasInputViewport.set(180,0,ofGetWindowWidth()-180,ofGetWindowHeight()/2 - 4);
     canvasOutputViewport.set(180,ofGetWindowHeight()/2 + 4,ofGetWindowWidth()-180,ofGetWindowHeight()/2);
+
+    canvasInputViewportAlone.set(180,0,ofGetWindowWidth()-180,ofGetWindowHeight());
+    canvasOutputViewportAlone.set(180,0,ofGetWindowWidth()-180,ofGetWindowHeight());
 }
 
 //--------------------------------------------------------------
@@ -559,13 +633,20 @@ void ofxMtlMapping2D::mouseDragged(ofMouseEventArgs &e){
       return;
     }
 
-    if(canvasInputViewport.inside(ofVec3f(eX,eY,0))){
+    if(ofxMtlMapping2DControls::mapping2DControls()->getVisualizerMode() == 0){
         isInputActive       = true;
+    }else if(ofxMtlMapping2DControls::mapping2DControls()->getVisualizerMode() == 1){
+        isInputActive       = false;
+    }else{
+        if(canvasInputViewport.inside(ofVec3f(eX,eY,0))){
+            isInputActive       = true;
+        }
+
+        if(canvasOutputViewport.inside(ofVec3f(eX,eY,0))){
+            isInputActive       = false;
+        }
     }
 
-    if(canvasOutputViewport.inside(ofVec3f(eX,eY,0))){
-        isInputActive       = false;
-    }
 
     // ----
     // a shape has been selected
@@ -609,21 +690,31 @@ void ofxMtlMapping2D::mousePressed(ofMouseEventArgs &e)
       return;
     }
 
-    if(canvasInputViewport.inside(ofVec3f(e.x,e.y,0))){
+    if(ofxMtlMapping2DControls::mapping2DControls()->getVisualizerMode() == 0){
         isInputActive       = true;
         isFocusChanged      = true;
         actualMouse = ofVec2f(canvasInput.getMovingPoint().x,canvasInput.getMovingPoint().y);
         ofxMtlMapping2DControls::mapping2DControls()->setMappingMode(MAPPING_MODE_INPUT);
-    }
-
-    if(canvasOutputViewport.inside(ofVec3f(e.x,e.y,0))){
+    }else if(ofxMtlMapping2DControls::mapping2DControls()->getVisualizerMode() == 1){
         isInputActive       = false;
         isFocusChanged      = true;
         actualMouse = ofVec2f(canvasOutput.getMovingPoint().x,canvasOutput.getMovingPoint().y);
         ofxMtlMapping2DControls::mapping2DControls()->setMappingMode(MAPPING_MODE_OUTPUT);
+    }else{
+        if(canvasInputViewport.inside(ofVec3f(e.x,e.y,0))){
+            isInputActive       = true;
+            isFocusChanged      = true;
+            actualMouse = ofVec2f(canvasInput.getMovingPoint().x,canvasInput.getMovingPoint().y);
+            ofxMtlMapping2DControls::mapping2DControls()->setMappingMode(MAPPING_MODE_INPUT);
+        }
+
+        if(canvasOutputViewport.inside(ofVec3f(e.x,e.y,0))){
+            isInputActive       = false;
+            isFocusChanged      = true;
+            actualMouse = ofVec2f(canvasOutput.getMovingPoint().x,canvasOutput.getMovingPoint().y);
+            ofxMtlMapping2DControls::mapping2DControls()->setMappingMode(MAPPING_MODE_OUTPUT);
+        }
     }
-
-
     
     if (ofxMtlMapping2DControls::mapping2DControls()->isHit(eX, eY))
         return;
@@ -702,6 +793,8 @@ void ofxMtlMapping2D::mouseScrolled(ofMouseEventArgs &e){
 //--------------------------------------------------------------
 void ofxMtlMapping2D::keyPressed(ofKeyEventArgs &e)
 {
+
+    ofLog(OF_LOG_NOTICE,"%i",e.key);
     // ----
     switch (e.key) {
         case 9:  // TAB

@@ -73,6 +73,8 @@ ofxMtlMapping2DControls::ofxMtlMapping2DControls(int width){
     _showShapesId = true;
     _mappingModeChanged = true; // initialized to true so that when the app launch the 'shapes' are correctly setted.
     _mappingMode = MAPPING_MODE_OUTPUT;
+
+    visualizerMode = 2; // 0  INPUT, 1 OUTPUT, 2 DUAL
     
     _toolsCanvas = new ofxUIScrollableCanvas(0, 0, width, ofGetHeight());
     _toolsCanvas->setScrollableDirections(false, true);
@@ -86,6 +88,14 @@ ofxMtlMapping2DControls::ofxMtlMapping2DControls(int width){
         _toolsCanvas->addWidgetDown(new ofxUIImageToggle(kToggleSize, kToggleSize, _createNewTriangle, "GUI/triangle.png", kSettingMappingCreateNewTriangle));
         _toolsCanvas->addWidgetDown(new ofxUIImageToggle(kToggleSize, kToggleSize, _createNewMask, "GUI/mask.png", kSettingMappingCreateNewMask));
     }
+
+    ofxUISpacer *spacer = new ofxUISpacer(kToggleSize, kSpacerHeight);
+    spacer->setDrawFill(false);
+
+    _toolsCanvas->addWidgetDown(spacer);
+    _toolsCanvas->addWidgetDown(new ofxUIImageToggle(kToggleSize, kToggleSize, false, "GUI/texture.png", kSettingMappingModeInput));
+    _toolsCanvas->addWidgetDown(new ofxUIImageToggle(kToggleSize, kToggleSize, false, "GUI/projo.png", kSettingMappingModeOutput));
+    _toolsCanvas->addWidgetDown(new ofxUIImageToggle(kToggleSize, kToggleSize, false, "GUI/dual.png", kSettingMappingModeDual));
     
     // ----
     ofAddListener(_toolsCanvas->newGUIEvent, this, &ofxMtlMapping2DControls::toolsUiEvent);
@@ -140,6 +150,24 @@ void ofxMtlMapping2DControls::toolsUiEvent(ofxUIEventArgs &event){
         ofxMtlMapping2DPolygon::resetActivePolygonVars();
         
         _mappingModeChanged = true;
+
+        if (name == kSettingMappingModeOutput) {
+            visualizerMode = 1;
+
+            ((ofxUIImageToggle *)_toolsCanvas->getWidget(kSettingMappingModeInput))->setValue(false);
+            ((ofxUIImageToggle *)_toolsCanvas->getWidget(kSettingMappingModeDual))->setValue(false);
+
+        }else if (name == kSettingMappingModeInput) {
+            visualizerMode = 0;
+
+            ((ofxUIImageToggle *)_toolsCanvas->getWidget(kSettingMappingModeOutput))->setValue(false);
+            ((ofxUIImageToggle *)_toolsCanvas->getWidget(kSettingMappingModeDual))->setValue(false);
+        }else if(name == kSettingMappingModeDual){
+            visualizerMode = 2;
+
+            ((ofxUIImageToggle *)_toolsCanvas->getWidget(kSettingMappingModeInput))->setValue(false);
+            ((ofxUIImageToggle *)_toolsCanvas->getWidget(kSettingMappingModeOutput))->setValue(false);
+        }
         
         refreshShapesListForMappingMode(_mappingMode);
 
@@ -241,7 +269,7 @@ void ofxMtlMapping2DControls::refreshShapesListForMappingMode(ofxMtlMapping2DMod
     for (it=ofxMtlMapping2DShapes::pmShapes.rbegin(); it!=ofxMtlMapping2DShapes::pmShapes.rend(); it++) {
         ofxMtlMapping2DShape* shape = *it;
         
-        if (mappingMode == MAPPING_MODE_OUTPUT || (mappingMode == MAPPING_MODE_INPUT && shape->shapeType != MAPPING_2D_SHAPE_MASK)) {
+        if (mappingMode == MAPPING_MODE_OUTPUT || mappingMode == MAPPING_MODE_DUAL || (mappingMode == MAPPING_MODE_INPUT && shape->shapeType != MAPPING_2D_SHAPE_MASK)) {
             ofxMtlMapping2DControls::mapping2DControls()->addShapeToList(shape->shapeId, shape->shapeType);
         }
     }
