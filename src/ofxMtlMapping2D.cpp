@@ -59,7 +59,7 @@ void ofxMtlMapping2D::init(int width, int height, string mappingXmlFilePath)
     _backgroundFbo.allocate(width, height, GL_RGBA, 0);
 
     // ----
-    ofxMtlMapping2DSettings::infoFont.setup(ofToDataPath("fonts/IBMPlexMono-Medium.ttf"),1.0,2048,true,8,3.0f);
+    ofxMtlMapping2DSettings::infoFont.load(ofToDataPath("fonts/IBMPlexMono-Medium.ttf"),12);
     
     // ----
     _mappingXmlFilePath = mappingXmlFilePath;

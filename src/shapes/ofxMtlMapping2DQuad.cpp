@@ -19,22 +19,24 @@ void ofxMtlMapping2DQuad::render()
     glMultMatrixf(inputPolygon->homoMatrix);
     glBegin(GL_POLYGON);
     
-//    int i = 0;
-//    list<ofxMtlMapping2DVertex*>::iterator it;
-//    for (it=inputPolygon->vertices.begin(); it!=inputPolygon->vertices.end(); it++) {
-//        ofxMtlMapping2DVertex* vertex = *it;
-//        glTexCoord2f(vertex->center.x, vertex->center.y);
-//        glVertex2f(inputPolygon->polyline->getVertices()[i].x - inputPolygon->boundingBox.x, inputPolygon->polyline->getVertices()[i].y - inputPolygon->boundingBox.y);
-//        i++;
-//    }
-    
-    for (int i = 0; i < inputPolygon->polyline->size(); i++) {
-        glTexCoord2f(inputPolygon->polyline->getVertices()[i].x, inputPolygon->polyline->getVertices()[i].y);
-        //glVertex2f(inputPolygon->polyline->getVertices()[i].x, inputPolygon->polyline->getVertices()[i].y);
-        glVertex2f(inputPolygon->polyline->getVertices()[i].x - inputPolygon->boundingBox.x, inputPolygon->polyline->getVertices()[i].y - inputPolygon->boundingBox.y);
+    if (ofIsGLProgrammableRenderer()) {
+        quad.clear();
+        quad.setMode(OF_PRIMITIVE_TRIANGLE_FAN);
+        for (int i = 0; i < polyline->size(); i++) {
+            quad.addVertex(glm::vec3(polyline->getVertices()[i].x - boundingBox.x, polyline->getVertices()[i].y - boundingBox.y, 0));
+            quad.addTexCoord(glm::vec2(inputPolygon->polyline->getVertices()[i].x, inputPolygon->polyline->getVertices()[i].y));
+        }
+        ofPushMatrix();
+        ofTranslate(boundingBox.x,boundingBox.y,0);
+        quad.draw(OF_MESH_FILL);
+        ofPopMatrix();
+    }else{
+        for (int i = 0; i < inputPolygon->polyline->size(); i++) {
+            glTexCoord2f(inputPolygon->polyline->getVertices()[i].x, inputPolygon->polyline->getVertices()[i].y);
+            glVertex2f(polyline->getVertices()[i].x - boundingBox.x, polyline->getVertices()[i].y - boundingBox.y);
+        }
     }
-    
-    
+
     glEnd();
     glPopMatrix();
 }

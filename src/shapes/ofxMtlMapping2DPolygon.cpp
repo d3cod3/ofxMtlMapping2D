@@ -164,7 +164,7 @@ void ofxMtlMapping2DPolygon::drawID()
     }
     
 
-    ofxMtlMapping2DSettings::infoFont.draw(ofToString(shapeId),14, _centroid2D.x + xOffset, _centroid2D.y + yOffset);
+    ofxMtlMapping2DSettings::infoFont.drawString(ofToString(shapeId), _centroid2D.x + xOffset, _centroid2D.y + yOffset);
     ofDisableAlphaBlending();
 }
 
