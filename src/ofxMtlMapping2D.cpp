@@ -1099,7 +1099,12 @@ void ofxMtlMapping2D::saveShapesList()
 	}
 	
 	//Save to file
-	newShapesListXML.saveFile(_mappingXmlFilePath);
+
+#if OF_VERSION_MAJOR == 0 && OF_VERSION_MINOR < 12
+            newShapesListXML.saveFile(_mappingXmlFilePath);
+#else
+            newShapesListXML.save(_mappingXmlFilePath);
+#endif
     //ofLog(OF_LOG_NOTICE, "Status > Mapping settings saved to xml file: %s",_mappingXmlFilePath.c_str());
 
 }
