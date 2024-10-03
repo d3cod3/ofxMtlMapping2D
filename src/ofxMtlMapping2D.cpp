@@ -900,7 +900,12 @@ void ofxMtlMapping2D::loadShapesList()
 	//we load our settings file
 	//if it doesn't exist we can still make one
 	//by hitting the 's' key
-	if( _shapesListXML.loadFile(_mappingXmlFilePath) ){
+
+#if OF_VERSION_MAJOR == 0 && OF_VERSION_MINOR < 12
+    if( _shapesListXML.loadFile(_mappingXmlFilePath) ){
+#else
+    if( _shapesListXML.load(_mappingXmlFilePath) ){
+#endif
 		feedBackMessage = _mappingXmlFilePath + " loaded!";
 	}else{
 		feedBackMessage = "unable to load " + _mappingXmlFilePath + " check data/ folder";
