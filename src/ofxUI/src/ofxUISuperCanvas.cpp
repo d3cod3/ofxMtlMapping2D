@@ -343,14 +343,24 @@ void ofxUISuperCanvas::saveSettings(string fileName)
         }
         XML->popTag();
     }
+
+#if OF_VERSION_MAJOR == 0 && OF_VERSION_MINOR < 12
     XML->saveFile(fileName);
+#else
+    XML->save(fileName);
+#endif
     delete XML;
 }
 
 void ofxUISuperCanvas::loadSettings(string fileName)
 {
     ofxXmlSettings *XML = new ofxXmlSettings();
+#if OF_VERSION_MAJOR == 0 && OF_VERSION_MINOR < 12
     XML->loadFile(fileName);
+#else
+    XML->load(fileName);
+#endif
+
     int widgetTags = XML->getNumTags("Widget");
     for(int i = 0; i < widgetTags; i++)
     {
