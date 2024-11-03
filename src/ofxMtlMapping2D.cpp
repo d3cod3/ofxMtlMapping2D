@@ -41,8 +41,11 @@ void ofxMtlMapping2D::reset(int width, int height){
     _fboH = height;
 
     _fbo.allocate(width, height, GL_RGBA, 0);
+    ofDisableArbTex();
     _outputFbo.allocate(width, height, GL_RGBA, 0);
+    ofEnableArbTex();
     _backgroundFbo.allocate(width, height, GL_RGBA, 0);
+
 }
 
 //--------------------------------------------------------------
@@ -55,8 +58,11 @@ void ofxMtlMapping2D::init(int width, int height, string mappingXmlFilePath)
     _fboH = height;
 
     _fbo.allocate(width, height, GL_RGBA, 0);
+    ofDisableArbTex();
     _outputFbo.allocate(width, height, GL_RGBA, 0);
+    ofEnableArbTex();
     _backgroundFbo.allocate(width, height, GL_RGBA, 0);
+
 
     // ----
     ofxMtlMapping2DSettings::infoFont.load(ofToDataPath("fonts/IBMPlexMono-Medium.ttf"),12);
